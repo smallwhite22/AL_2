@@ -1,0 +1,100 @@
+[{
+        "n": "01-01",
+        "sn": 1,
+        "ab": "cacay",
+        "ch": "一",
+        "en": "one",
+        "lv": "初級",
+        "ex": true
+    },
+    {
+        "n": "01-02",
+        "sn": 2,
+        "ab": "tusa",
+        "ch": "二",
+        "en": "two",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-03",
+        "sn": 3,
+        "ab": "tulu",
+        "ch": "三",
+        "en": "three",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-04",
+        "sn": 4,
+        "ab": "sepat",
+        "ch": "四",
+        "en": "four",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-05",
+        "sn": 5,
+        "ab": "lima",
+        "ch": "五",
+        "en": "five",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-06",
+        "sn": 6,
+        "ab": "enem",
+        "ch": "六",
+        "en": "six",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-07",
+        "sn": 7,
+        "ab": "pitu",
+        "ch": "七",
+        "en": "seven",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-08",
+        "sn": 8,
+        "ab": "walu",
+        "ch": "八",
+        "en": "eight",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-09",
+        "sn": 9,
+        "ab": "siwa",
+        "ch": "九",
+        "en": "nine",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-10",
+        "sn": 10,
+        "ab": "muketep",
+        "ch": "十",
+        "en": "ten",
+        "lv": "初級",
+        "ex": false
+    },
+    {
+        "n": "01-11",
+        "sn": 11,
+        "ab": "savaw tu cacay",
+        "ch": "十一",
+        "en": "eleven",
+        "lv": "初級",
+        "ex": false
+    }
+]

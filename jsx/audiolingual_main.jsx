@@ -1,4 +1,16 @@
+import React, {Component} from 'react';
+import PostList from './postList.jsx';
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <div><PostList/></div>
+        <div>211daefesssafeas1</div>
+      </div>
+    )
+  }
+}
+
 ReactDOM.render(
-    <h1>d11561</h1>,
-    document.getElementById('root')
-)
+  <App/>, document.getElementById('root'))
