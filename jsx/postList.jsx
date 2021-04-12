@@ -1,14 +1,28 @@
 import React, {Component} from 'react';
 import PostData from '../JSON/1/test.json';
-let ar = 1;
-let pp = PostData[ar].ex;
 
 class PostList extends Component {
 
   constructor(props) {
     super(props);
+    let ar = 1;
+    const qno = PostData[ar].n;
+    const qlist = PostData[ar].ab;
+    const anlist = PostData[ar].ch;
     this.state = {
-      value: ''
+      value: '',
+      arr:1,
+      todos: [
+        {
+          nn: PostData[0].n,
+          q: PostData[0].ab,
+          an: PostData[0].ch
+        }, {
+          nn: qno,
+          q: PostData[ar].ab,
+          an: anlist
+        }
+      ]
     };
     this.CheckA = this
       .CheckA
@@ -25,33 +39,39 @@ class PostList extends Component {
   CheckA(event) {
     event.preventDefault();
 
-    if (this.state.value == PostData[1].en) {
-      console.log('EEEEE')
+    if (this.state.value == this.state.arr) {
+      console.log(this.state.value, ',right answer')
     } else {
-      console.log('YYYYY')
+      console.log(this.state.value + this.ar, ',wrong answer')
     }
-    console.log(this.state.value);
   }
 
   render() {
+    let todos = this.state.todos;
 
     return (
       <div>
-        <div>
-          <p>{PostData[0].ab}</p>
-          <p>{PostData[0].en}</p>
-        </div>
-        <div>
-          <p>{PostData[1].ab}</p>
-          <p>{PostData[1].en}</p>
-          <form onSubmit={this.CheckA}>
-            <label>
-              Name:
-              <input type="text" value={this.state.value} onChange={this.handleChange}/>
-            </label>
-            <input type="submit" value="Submit"/>
-          </form>
-        </div>
+        <ul>
+          {todos.map((todo) => {
+
+            // 傳回 jsx
+            return (
+              <li key={todo.nn}>
+                {todo.q}, {todo.an}
+              </li>
+            );
+          })
+}
+        </ul>
+
+        <form onSubmit={this.CheckA}>
+          <label>
+            Input:
+            <input type="text" value={this.state.value} onChange={this.handleChange}/>
+          </label>
+          <input type="submit" value="Submit"/>
+        </form>
+
       </div>
     )
     // if (pp == false) {   console.log('yes')   return (     <div> <h1>YES!!</h1>

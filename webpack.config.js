@@ -3,7 +3,9 @@ const path = require('path');
 module.exports = {
     entry: {
         audiolingual_main:'/jsx/audiolingual_main.jsx',
-        postList:'/jsx/postList.jsx'
+        postList:'/jsx/postList.jsx',
+        audiolingual_main_2:'/jsx/audiolingual_main_2.jsx',
+        postList_2:'/jsx/postList_2.jsx'
       },
       output: {
         path: path.resolve(__dirname, './js'),
