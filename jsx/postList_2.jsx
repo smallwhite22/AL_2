@@ -11,10 +11,8 @@ let haveIt = [];
 //目前所在的題號
 let currentQ = 1;
 
-
-
-//整理JSON內元素資料相同的個數，ex:第一個題型的總數為qAllTypeDic[1]。
-//當最後一個題型為空的時候，!qAllTypeDic[?]會為true
+// 整理JSON內元素資料相同的個數，ex:第一個題型的總數為qAllTypeDic[1]。
+// 當最後一個題型為空的時候，!qAllTypeDic[?]會為true
 let qAllTypeDic = {},
   e;
 for (var i = 0, l = PostData.length; i < l; i++) {
@@ -124,36 +122,38 @@ class Post extends Component {
 
   //點下提交按鈕會先執行這個
   doIt(idx, array) {
-    
+
     //答對後執行的動作
     if (this.state.value == PostData[quNum].ch) {
-      currentQ = currentQ +1;
-      this.doFirst(array, () => this.doSecond(idx)
-      );
+      currentQ = currentQ + 1;
+      this.doFirst(array, () => this.doSecond(idx));
       //答錯後執行的動作
-    } else {
-
-    }
+    } else {}
   }
 
   doFirst(array, callback) {
-    console.log('目前已完成的題目數量(包括範例):', currentQ ,',範例的題號:', qAllTypeDic[qType]+1 );
-    if(currentQ == qAllTypeDic[qType]+1){
+    console.log('目前已完成的題目數量(包括範例):', currentQ, ',範例的題號:', qAllTypeDic[qType] + 1);
+    if (currentQ == qAllTypeDic[qType] + 1) {
       console.log('亂數陣列清空')
       empty();
+      let newEx = qAllType[qType];
       this.setState({
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
           ...this.state.todos, {
-            id: 'ex' + PostData[quNum].sn,
+            id: 'answer' + PostData[quNum].sn,
             ab: '',
             ch: PostData[quNum].ch
+          }, {
+            id: 'ex' + PostData[newEx].sn,
+            ab: 'ex' + PostData[newEx].ab,
+            ch: 'ex' + PostData[newEx].ch
           }
         ]
-  
+
       }, callback)
-    }
-    else{
+    } else {
+      console.log('產生題目')
       this.setState({
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
@@ -163,10 +163,10 @@ class Post extends Component {
             ch: PostData[quNum].ch
           }
         ]
-  
+
       }, callback)
     }
-    
+
   }
 
   doSecond(idx) {
