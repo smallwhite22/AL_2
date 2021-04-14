@@ -5,10 +5,7 @@ class PostList extends Component {
 
   constructor(props) {
     super(props);
-    let ar = 1;
-    const qno = PostData[ar].n;
-    const qlist = PostData[ar].ab;
-    const anlist = PostData[ar].ch;
+    
     this.state = {
       value: '',
       arr:1,
@@ -18,9 +15,9 @@ class PostList extends Component {
           q: PostData[0].ab,
           an: PostData[0].ch
         }, {
-          nn: qno,
-          q: PostData[ar].ab,
-          an: anlist
+          nn: PostData[1].n,
+          q: PostData[1].ab,
+          an: PostData[1].ch
         }
       ]
     };

@@ -6,7 +6,7 @@ class App extends Component {
     return (
       <div>
         <div><PostList/></div>
-        <div>7777777677</div>
+        <div></div>
       </div>
     )
   }
