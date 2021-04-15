@@ -159,10 +159,14 @@ class Post extends Component {
 
       qType = qType + 1;
       
+      for (i = 1; i <= qType; i++) { 
       
+        nextQ = qAllTypeDic[i] + qType; 
+        newEx = qAllTypeDic[i] + qType;
+    }
       //下列參數設定有錯
-      nextQ = qAllTypeDic[qType] + qType;
-      newEx = qAllTypeDic[qType] + qType;
+      // nextQ = qAllTypeDic[qType] + qType;
+      // newEx = qAllTypeDic[qType] + qType;
       cQ = 1;
 
       empty();
