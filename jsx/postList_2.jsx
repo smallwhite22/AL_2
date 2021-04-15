@@ -11,6 +11,10 @@ let haveIt = [];
 //目前所在的題號
 let currentQ = 1;
 
+let cQ = 1;
+
+let nextQ = 0;
+
 // 整理JSON內元素資料相同的個數，ex:第一個題型的總數為qAllTypeDic[1]。
 // 當最後一個題型為空的時候，!qAllTypeDic[?]會為true
 let qAllTypeDic = {},
@@ -27,12 +31,13 @@ let qAllType = Object
 
 //總題數
 let qAll = PostData.length;
-console.log()
 
 //同題型內有幾題
 let maxNr = PostData
   .filter(PostData => PostData.qc === qType)
   .length;
+
+let newEx = qAllTypeDic[qType] + qType -1;
 
 //產生不重複的隨機數字
 function generateUniqueRandom(maxNr) {
@@ -42,12 +47,11 @@ function generateUniqueRandom(maxNr) {
   //Coerce to number by boxing
   random = Number(random);
 
-  if (!haveIt.includes(random) && random != 0) {
+  if (!haveIt.includes(random) && random != 0 && random != 1) {
     haveIt.push(random);
     return random;
-
   } else {
-    if (haveIt.length < maxNr) {
+    if (haveIt.length < maxNr-1) {
       //Recursively generate number
       return generateUniqueRandom(maxNr);
     } else {
@@ -62,10 +66,8 @@ function empty() {
 }
 
 //隨機產生的題號
-let quNum = generateUniqueRandom(maxNr);
-
-console.log(quNum)
-
+let quNum = generateUniqueRandom(maxNr)-1;
+console.log('quNum:', quNum,'haveIt:',haveIt)
 class Post extends Component {
 
   // 建構子，每個 class 第一次產生時都會執行到這邊
@@ -126,17 +128,19 @@ class Post extends Component {
     //答對後執行的動作
     if (this.state.value == PostData[quNum].ch) {
       currentQ = currentQ + 1;
+      cQ = cQ + 1;
       this.doFirst(array, () => this.doSecond(idx));
       //答錯後執行的動作
-    } else {}
+    } else {
+      alert('答錯了')
+      this.setState({value: ''})
+    }
   }
 
   doFirst(array, callback) {
-    console.log('目前已完成的題目數量(包括範例):', currentQ, ',範例的題號:', qAllTypeDic[qType] + 1);
-    if (currentQ == qAllTypeDic[qType] + 1) {
-      console.log('亂數陣列清空')
-      empty();
-      let newEx = qAllType[qType];
+
+    if (cQ == qAllTypeDic[qType] && currentQ <= qAll) {
+      console.log('產生題目，下一個範例個題號:', newEx)
       this.setState({
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
@@ -151,9 +155,25 @@ class Post extends Component {
           }
         ]
 
-      }, callback)
+      }, callback);
+
+      qType = qType + 1;
+      
+      
+      //下列參數設定有錯
+      nextQ = qAllTypeDic[qType] + qType;
+      newEx = qAllTypeDic[qType] + qType;
+      cQ = 1;
+
+      empty();
+      maxNr = PostData
+        .filter(PostData => PostData.qc === qType)
+        .length;
+      console.log('亂數陣列清空', maxNr // if (currentQ > qAll) {   alert('練習完成') }
+      )
+
     } else {
-      console.log('產生題目')
+      console.log('產生答案')
       this.setState({
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
@@ -170,9 +190,12 @@ class Post extends Component {
   }
 
   doSecond(idx) {
-    quNum = generateUniqueRandom(maxNr);
+    quNum = nextQ + generateUniqueRandom(maxNr)-qType;
+    console.log('quNum:', quNum, 'nextQ:', nextQ, 'maxNr:', maxNr,'haveIt:',haveIt)
+    console.log('cQ:',cQ,'currentQ:',currentQ,'qAllTypeDic[qType]:',qAllTypeDic[qType])
     // 亂數隨機產生一個 id 設定 state
     this.setState({
+      value: '',
       // ES6 語法，就等於是把 todos 新增一個 item
       todos: [
         ...this.state.todos, {
@@ -205,9 +228,7 @@ class Post extends Component {
             );
           })
 }
-
         </ul>
-
         Input:
         <input type="text" value={this.state.value} onChange={this.handleChange}/>
         <button onClick={this.doIt}>Add item</button>
