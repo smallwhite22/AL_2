@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PostData from '../JSON/1/test.json';
+import PostData from '../JSON/1/a1.json';
 
 //題號，預設1代表是範例
 let newId = 1;
@@ -37,7 +37,7 @@ let maxNr = PostData
   .filter(PostData => PostData.qc === qType)
   .length;
 
-let newEx = qAllTypeDic[qType] + qType -1;
+let newEx = qAllTypeDic[qType];
 
 //產生不重複的隨機數字
 function generateUniqueRandom(maxNr) {
@@ -51,7 +51,7 @@ function generateUniqueRandom(maxNr) {
     haveIt.push(random);
     return random;
   } else {
-    if (haveIt.length < maxNr-1) {
+    if (haveIt.length < maxNr - 1) {
       //Recursively generate number
       return generateUniqueRandom(maxNr);
     } else {
@@ -66,8 +66,8 @@ function empty() {
 }
 
 //隨機產生的題號
-let quNum = generateUniqueRandom(maxNr)-1;
-console.log('quNum:', quNum,'haveIt:',haveIt)
+let quNum = generateUniqueRandom(maxNr) - 1;
+console.log('quNum:', quNum, 'haveIt:', haveIt)
 class Post extends Component {
 
   // 建構子，每個 class 第一次產生時都會執行到這邊
@@ -93,21 +93,17 @@ class Post extends Component {
 
     // 設定 state
     this.state = {
+      text1: '輸入答案:',
+      buttonCon: '送出答案',
       value: '',
-      answers: [
-        {
-          id: '',
-          ch: ''
-        }
-      ],
       todos: [
         {
           id: PostData[0].n,
-          ab: PostData[0].ab,
-          ch: PostData[0].ch
+          ab: '範例: ' + PostData[0].ab,
+          ch: '答案: ' + PostData[0].ch
         }, {
           id: PostData[quNum].n,
-          ab: PostData[quNum].ab,
+          ab: '題目: ' + PostData[quNum].ab,
           ch: ''
         }
       ]
@@ -126,47 +122,54 @@ class Post extends Component {
   doIt(idx, array) {
 
     //答對後執行的動作
-    if (this.state.value == PostData[quNum].ch) {
+    if (this.state.value == PostData[quNum].ch && currentQ < qAll) {
       currentQ = currentQ + 1;
       cQ = cQ + 1;
       this.doFirst(array, () => this.doSecond(idx));
       //答錯後執行的動作
-    } else {
+    } else if (currentQ > qAll) {
+      window
+        .location
+        .reload();
+      console.log('重整頁面')
+    } else if (this.state.value != PostData[quNum].ch && currentQ < qAll) {
       alert('答錯了')
-      this.setState({value: ''})
+      
+    } else {
+      window
+        .location
+        .reload();
+      console.log('重整頁面')
     }
+
   }
 
   doFirst(array, callback) {
 
-    if (cQ == qAllTypeDic[qType] && currentQ <= qAll) {
+    if (cQ == qAllTypeDic[qType] && currentQ < qAll) {
       console.log('產生題目，下一個範例個題號:', newEx)
+      currentQ = currentQ + 1;
       this.setState({
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
           ...this.state.todos, {
             id: 'answer' + PostData[quNum].sn,
             ab: '',
-            ch: PostData[quNum].ch
+            ch: '答案: ' + PostData[quNum].ch
           }, {
             id: 'ex' + PostData[newEx].sn,
-            ab: 'ex' + PostData[newEx].ab,
-            ch: 'ex' + PostData[newEx].ch
+            ab: '範例: ' + PostData[newEx].ab,
+            ch: '答案: ' + PostData[newEx].ch
           }
         ]
 
       }, callback);
 
       qType = qType + 1;
-      
-      for (i = 1; i <= qType; i++) { 
-      
-        nextQ = qAllTypeDic[i] + qType; 
-        newEx = qAllTypeDic[i] + qType;
-    }
+
       //下列參數設定有錯
-      // nextQ = qAllTypeDic[qType] + qType;
-      // newEx = qAllTypeDic[qType] + qType;
+      nextQ = qAllTypeDic[qType - 1] + nextQ;
+      newEx = qAllTypeDic[qType] + newEx;
       cQ = 1;
 
       empty();
@@ -184,7 +187,7 @@ class Post extends Component {
           ...this.state.todos, {
             id: 'answer' + PostData[quNum].sn,
             ab: '',
-            ch: PostData[quNum].ch
+            ch: '答案: ' + PostData[quNum].ch
           }
         ]
 
@@ -194,21 +197,26 @@ class Post extends Component {
   }
 
   doSecond(idx) {
-    quNum = nextQ + generateUniqueRandom(maxNr)-qType;
-    console.log('quNum:', quNum, 'nextQ:', nextQ, 'maxNr:', maxNr,'haveIt:',haveIt)
-    console.log('cQ:',cQ,'currentQ:',currentQ,'qAllTypeDic[qType]:',qAllTypeDic[qType])
-    // 亂數隨機產生一個 id 設定 state
-    this.setState({
-      value: '',
-      // ES6 語法，就等於是把 todos 新增一個 item
-      todos: [
-        ...this.state.todos, {
-          id: PostData[quNum].sn,
-          ab: PostData[quNum].ab,
-          ch: ''
-        }
-      ]
-    })
+    if (currentQ == qAll) {
+      alert('答對了，練習結束');
+      this.setState({test1: '', value: '', buttonCon: '再練習一次'})
+    } else {
+      quNum = nextQ + generateUniqueRandom(maxNr) - 1;
+      console.log('quNum:', quNum, 'nextQ:', nextQ, 'maxNr:', maxNr, 'haveIt:', haveIt)
+      console.log('cQ:', cQ, 'currentQ:', currentQ, 'qAll:', qAll, 'qAllTypeDic[qType]:', qAllTypeDic[qType])
+      // 亂數隨機產生一個 id 設定 state
+      this.setState({
+        value: '',
+        // ES6 語法，就等於是把 todos 新增一個 item
+        todos: [
+          ...this.state.todos, {
+            id: PostData[quNum].sn,
+            ab: '題目: ' + PostData[quNum].ab,
+            ch: ''
+          }
+        ]
+      })
+    }
   }
 
   render() {
@@ -220,22 +228,34 @@ class Post extends Component {
     return (
       <div>
 
-        <ul>
+        <ul className='list'>
           {todos.map((todo) => {
 
             // 傳回 jsx
             return (
               <li key={todo.id}>
-                <p>{todo.ab}</p>
-                <p>{todo.ch}</p>
+                <p
+                  className={todo.ab
+                  ? 'class-a'
+                  : 'class-b'}>{todo.ab}</p>
+                <p
+                  className={todo.ch
+                  ? 'class-a'
+                  : 'class-b'}>{todo.ch}</p>
               </li>
             );
           })
 }
         </ul>
-        Input:
-        <input type="text" value={this.state.value} onChange={this.handleChange}/>
-        <button onClick={this.doIt}>Add item</button>
+        <div className='wordBox'>
+          {this.state.text1}<input
+            className='input'
+            type="text"
+            value={this.state.value}
+            onChange={this.handleChange}/>
+
+          <button className='btn1' onClick={this.doIt}>{this.state.buttonCon}</button>
+        </div>
       </div>
     );
   }
