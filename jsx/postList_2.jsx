@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PostData from '../JSON/1/a1.json';
 
-//題號，預設1代表是範例
-let newId = 1;
+
+
 //題型
 let qType = 1;
 //不重覆亂數的容器
@@ -25,9 +25,9 @@ for (var i = 0, l = PostData.length; i < l; i++) {
 }
 
 //題型總數
-let qAllType = Object
-  .keys(qAllTypeDic)
-  .length;
+// let qAllType = Object
+//   .keys(qAllTypeDic)
+//   .length;
 
 //總題數
 let qAll = PostData.length;
@@ -68,8 +68,8 @@ function empty() {
 //隨機產生的題號
 let quNum = generateUniqueRandom(maxNr) - 1;
 console.log('quNum:', quNum, 'haveIt:', haveIt)
-class Post extends Component {
 
+class Post extends Component {
   // 建構子，每個 class 第一次產生時都會執行到這邊
   constructor(props) {
     super(props);
@@ -84,15 +84,10 @@ class Post extends Component {
     this.doIt = this
       .doIt
       .bind(this);
-    this.doFirst = this
-      .doFirst
-      .bind(this);
-    this.doSecond = this
-      .doSecond
-      .bind(this);
 
     // 設定 state
     this.state = {
+      audioPath: '',
       text1: '輸入答案:',
       buttonCon: '送出答案',
       value: '',
@@ -108,6 +103,7 @@ class Post extends Component {
         }
       ]
     }
+    console.log(this.state.todos)
   }
 
   componentDidMount() {}
@@ -120,7 +116,6 @@ class Post extends Component {
 
   //點下提交按鈕會先執行這個
   doIt(idx, array) {
-
     //答對後執行的動作
     if (this.state.value == PostData[quNum].ch && currentQ < qAll) {
       currentQ = currentQ + 1;
@@ -133,8 +128,9 @@ class Post extends Component {
         .reload();
       console.log('重整頁面')
     } else if (this.state.value != PostData[quNum].ch && currentQ < qAll) {
-      alert('答錯了')
-      
+
+      this.wrongSound(array, () => this.playWrongSound(idx));
+
     } else {
       window
         .location
@@ -144,19 +140,34 @@ class Post extends Component {
 
   }
 
-  doFirst(array, callback) {
+  wrongSound(array, callback) {
+    this.setState({
+      audioPath: '../sound/wrong.mp3'
+    }, callback)
 
+  }
+  playWrongSound(idx) {
+    let audio = new Audio(this.state.audioPath)
+    audio.play()
+  }
+
+  doFirst(array, callback) {
+this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
     if (cQ == qAllTypeDic[qType] && currentQ < qAll) {
       console.log('產生題目，下一個範例個題號:', newEx)
+      this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
       currentQ = currentQ + 1;
       this.setState({
+        audioPath: '../sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
-          ...this.state.todos, {
-            id: 'answer' + PostData[quNum].sn,
-            ab: '',
-            ch: '答案: ' + PostData[quNum].ch
-          }, {
+          ...this.state.todos, 
+          // {
+          //   id: 'answer' + PostData[quNum].sn,
+          //   ab: '',
+          //   ch: '答案: ' + PostData[quNum].ch
+          // },
+           {
             id: 'ex' + PostData[newEx].sn,
             ab: '範例: ' + PostData[newEx].ab,
             ch: '答案: ' + PostData[newEx].ch
@@ -181,25 +192,26 @@ class Post extends Component {
 
     } else {
       console.log('產生答案')
+      this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
       this.setState({
+
+        audioPath: '../sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
-        todos: [
-          ...this.state.todos, {
-            id: 'answer' + PostData[quNum].sn,
-            ab: '',
-            ch: '答案: ' + PostData[quNum].ch
-          }
-        ]
+        // todos: [   ...this.state.todos, {     id: 'answer' + PostData[quNum].sn,
+        // ab: '',     ch: '答案: ' + PostData[quNum].ch   } ]
 
       }, callback)
+
     }
 
   }
 
   doSecond(idx) {
+    
+    let audio = new Audio(this.state.audioPath)
+    audio.play()
     if (currentQ == qAll) {
-      alert('答對了，練習結束');
-      this.setState({test1: '', value: '', buttonCon: '再練習一次'})
+      this.setState({text1: '全部答對了，練習結束', value: '', buttonCon: '再練習一次'})
     } else {
       quNum = nextQ + generateUniqueRandom(maxNr) - 1;
       console.log('quNum:', quNum, 'nextQ:', nextQ, 'maxNr:', maxNr, 'haveIt:', haveIt)
@@ -217,6 +229,8 @@ class Post extends Component {
         ]
       })
     }
+    console.log(this.state.todos)
+    window.scrollTo(0,document.body.scrollHeight);
   }
 
   render() {
@@ -234,14 +248,14 @@ class Post extends Component {
             // 傳回 jsx
             return (
               <li key={todo.id}>
-                <p
+                <div
                   className={todo.ab
                   ? 'class-a'
-                  : 'class-b'}>{todo.ab}</p>
-                <p
+                  : 'class-b'}>{todo.ab}</div>
+                <div
                   className={todo.ch
                   ? 'class-a'
-                  : 'class-b'}>{todo.ch}</p>
+                  : 'class-b'}>{todo.ch}</div>
               </li>
             );
           })
@@ -256,6 +270,7 @@ class Post extends Component {
 
           <button className='btn1' onClick={this.doIt}>{this.state.buttonCon}</button>
         </div>
+
       </div>
     );
   }

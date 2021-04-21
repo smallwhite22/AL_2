@@ -31,45 +31,51 @@ body {
 .list li {
   background-color: #FFF9E1;
   border-radius: 5px;
-  margin-bottom: 10px;
 }
 
-.list li p {
+.list li div {
   padding: 15px;
-  height: 25px;
 }
 
-.list li p:nth-child(2) {
+.list li div:nth-child(2) {
   background: #fff2be;
   border-radius: 5px;
+  margin-bottom: 15px;
 }
 
 .wordBox {
-  padding-left: 50px;
   margin-bottom: 50px;
+  background: #fff2be;
+  margin: 0px 50px 0 50px;
+  border-radius: 5px;
+  padding: 20px 10px;
 }
 
 .input {
-  width: 400px;
-  height: 30px;
+  width: 600px;
+  height: 40px;
   margin-left: 5px;
-  position: relative;
-  top: -5px;
-  font-size: 18px;
+  font-size: 22px;
+  outline-style: none;
+  border-bottom: 1px solid;
+}
+
+.input[type=text] {
+  border: none;
+  border-bottom: 1px solid;
+  background-color: #fff2be;
 }
 
 .btn1 {
   margin-left: 20px;
   position: relative;
-  top: -8px;
+  top: -3px;
   font-size: 16px;
 }
 
 .class-b {
-  height: 0 !important;
   padding: 0 !important;
-  margin: 0 !important;
-  background: #fff !important;
+  background: #000 !important;
 }
 
 button {
@@ -145,5 +151,9 @@ button.btn1:active::before {
           box-shadow: 0 0 0 2px #b18597, 0 0 #FFF9E1;
   -webkit-transform: translate3d(0, 0, -1em);
           transform: translate3d(0, 0, -1em);
+}
+
+audio {
+  visibility: hidden;
 }
 /*# sourceMappingURL=adiolingual.css.map */
