@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import PostData from '../JSON/1/a1.json';
 
-
-
 //題型
 let qType = 1;
 //不重覆亂數的容器
@@ -24,12 +22,7 @@ for (var i = 0, l = PostData.length; i < l; i++) {
   qAllTypeDic[e.qc] = (qAllTypeDic[e.qc] || 0) + 1;
 }
 
-//題型總數
-// let qAllType = Object
-//   .keys(qAllTypeDic)
-//   .length;
-
-//總題數
+//題型總數 let qAllType = Object   .keys(qAllTypeDic)   .length; 總題數
 let qAll = PostData.length;
 
 //同題型內有幾題
@@ -95,11 +88,13 @@ class Post extends Component {
         {
           id: PostData[0].n,
           ab: '範例: ' + PostData[0].ab,
-          ch: '答案: ' + PostData[0].ch
+          ch: '答案: ' + PostData[0].ch,
+          qn: ''
         }, {
           id: PostData[quNum].n,
           ab: '題目: ' + PostData[quNum].ab,
-          ch: ''
+          ch: '',
+          qn: '1'
         }
       ]
     }
@@ -152,7 +147,7 @@ class Post extends Component {
   }
 
   doFirst(array, callback) {
-this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
+    this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
     if (cQ == qAllTypeDic[qType] && currentQ < qAll) {
       console.log('產生題目，下一個範例個題號:', newEx)
       this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
@@ -161,13 +156,10 @@ this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
         audioPath: '../sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
-          ...this.state.todos, 
-          // {
-          //   id: 'answer' + PostData[quNum].sn,
-          //   ab: '',
-          //   ch: '答案: ' + PostData[quNum].ch
-          // },
-           {
+          ...this.state.todos,
+          // {   id: 'answer' + PostData[quNum].sn,   ab: '',   ch: '答案: ' +
+          // PostData[quNum].ch },
+          {
             id: 'ex' + PostData[newEx].sn,
             ab: '範例: ' + PostData[newEx].ab,
             ch: '答案: ' + PostData[newEx].ch
@@ -197,8 +189,8 @@ this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
 
         audioPath: '../sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
-        // todos: [   ...this.state.todos, {     id: 'answer' + PostData[quNum].sn,
-        // ab: '',     ch: '答案: ' + PostData[quNum].ch   } ]
+        // todos: [   ...this.state.todos, {     id: 'answer' + PostData[quNum].sn, ab:
+        // '',     ch: '答案: ' + PostData[quNum].ch   } ]
 
       }, callback)
 
@@ -207,7 +199,7 @@ this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
   }
 
   doSecond(idx) {
-    
+
     let audio = new Audio(this.state.audioPath)
     audio.play()
     if (currentQ == qAll) {
@@ -224,13 +216,14 @@ this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
           ...this.state.todos, {
             id: PostData[quNum].sn,
             ab: '題目: ' + PostData[quNum].ab,
-            ch: ''
+            ch: '',
+            qn: cQ
           }
         ]
       })
     }
     console.log(this.state.todos)
-    window.scrollTo(0,document.body.scrollHeight);
+    window.scrollTo(0, document.body.scrollHeight);
   }
 
   render() {
@@ -248,14 +241,26 @@ this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
             // 傳回 jsx
             return (
               <li key={todo.id}>
+
+                <div>
+                  <div
+                    className={todo.qn
+                    ? 'class-a'
+                    : 'class-b'}>{todo.qn}.</div>
+                  <div
+                    className={todo.qn
+                    ? 'class-c'
+                    : 'class-a'}>{todo.ab}</div>
+                </div>
+
                 <div
-                  className={todo.ab
-                  ? 'class-a'
-                  : 'class-b'}>{todo.ab}</div>
-                <div
-                  className={todo.ch
-                  ? 'class-a'
-                  : 'class-b'}>{todo.ch}</div>
+                  className={
+                    !todo.qn && todo.ch ? "class-a" : 'class-b'
+                   
+                    }
+                    
+                    >
+                     {todo.ch}</div>
               </li>
             );
           })

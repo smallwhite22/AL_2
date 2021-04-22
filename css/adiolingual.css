@@ -29,18 +29,23 @@ body {
 }
 
 .list li {
-  background-color: #FFF9E1;
   border-radius: 5px;
+  margin-bottom: 15px;
 }
 
-.list li div {
+.list li div div:nth-child(1) {
+  float: left;
+}
+
+.list li div div:nth-child(2) {
+  background-color: #FFF9E1;
   padding: 15px;
 }
 
 .list li div:nth-child(2) {
   background: #fff2be;
   border-radius: 5px;
-  margin-bottom: 15px;
+  padding: 15px;
 }
 
 .wordBox {
@@ -73,9 +78,14 @@ body {
   font-size: 16px;
 }
 
+.class-c {
+  margin-left: 15px;
+}
+
 .class-b {
   padding: 0 !important;
-  background: #000 !important;
+  visibility: hidden;
+  width: 0;
 }
 
 button {
