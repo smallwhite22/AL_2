@@ -6,7 +6,7 @@
         "ab": "wacu",
         "ch": "Ira ku wacu nu maku.",
         "en": "one",
-        "lv": "初級",
+        "lv": "題型一 擁有句",
         "ex": true
     },
     {
@@ -50,7 +50,7 @@
         "ab": "cudad",
         "ch": "Ira ku cudad nu heni.",
         "en": "five",
-        "lv": "初級",
+        "lv": "題型二 擁有句(他們)",
         "ex": false
     },
     {
@@ -94,7 +94,7 @@
         "ab": "vunga",
         "ch": "Ira haw ku vunga nu misu?",
         "en": "nine",
-        "lv": "初級",
+        "lv": "題型三 擁有句(問句)",
         "ex": false
     },
     {

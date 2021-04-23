@@ -17,6 +17,7 @@ body {
   background-color: #fff;
   min-height: 100vh;
   font-size: 24px;
+  padding-bottom: 100px;
 }
 
 #line {
@@ -29,22 +30,20 @@ body {
 }
 
 .list li {
+  margin-bottom: 20px;
+}
+
+.list li div {
   border-radius: 5px;
-  margin-bottom: 15px;
 }
 
 .list li div div:nth-child(1) {
-  float: left;
-}
-
-.list li div div:nth-child(2) {
   background-color: #FFF9E1;
   padding: 15px;
 }
 
-.list li div:nth-child(2) {
-  background: #fff2be;
-  border-radius: 5px;
+.list li div div:nth-child(2) {
+  background-color: #fff2be;
   padding: 15px;
 }
 
@@ -57,9 +56,9 @@ body {
 }
 
 .input {
-  width: 600px;
+  width: 640px;
   height: 40px;
-  margin-left: 5px;
+  margin-left: 10px;
   font-size: 22px;
   outline-style: none;
   border-bottom: 1px solid;
@@ -78,14 +77,31 @@ body {
   font-size: 16px;
 }
 
-.class-c {
-  margin-left: 15px;
+.class-a {
+  float: left;
 }
 
 .class-b {
   padding: 0 !important;
   visibility: hidden;
   width: 0;
+  height: 0;
+}
+
+.class-c {
+  margin-left: 30px;
+}
+
+.class-d {
+  font-weight: 1000;
+  font-size: 28px;
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+
+.class-e {
+  margin-left: 50px;
+  margin-bottom: 5px;
 }
 
 button {

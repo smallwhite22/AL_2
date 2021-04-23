@@ -80,8 +80,10 @@ class Post extends Component {
 
     // 設定 state
     this.state = {
+      inputVisibility: true,
       audioPath: '',
       text1: '輸入答案:',
+      text2: '',
       buttonCon: '送出答案',
       value: '',
       todos: [
@@ -89,7 +91,8 @@ class Post extends Component {
           id: PostData[0].n,
           ab: '範例: ' + PostData[0].ab,
           ch: '答案: ' + PostData[0].ch,
-          qn: ''
+          qn: '',
+          lv: PostData[0].lv
         }, {
           id: PostData[quNum].n,
           ab: '題目: ' + PostData[quNum].ab,
@@ -137,7 +140,8 @@ class Post extends Component {
 
   wrongSound(array, callback) {
     this.setState({
-      audioPath: '../sound/wrong.mp3'
+      text2:'答錯了，再試一次',
+      audioPath: './sound/wrong.mp3'
     }, callback)
 
   }
@@ -147,13 +151,14 @@ class Post extends Component {
   }
 
   doFirst(array, callback) {
-    this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
+
     if (cQ == qAllTypeDic[qType] && currentQ < qAll) {
       console.log('產生題目，下一個範例個題號:', newEx)
-      this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
+      this.state.todos[currentQ - 1].ch = '答案: ' + PostData[quNum].ch;
       currentQ = currentQ + 1;
       this.setState({
-        audioPath: '../sound/right.mp3',
+        text2:'答對了，繼續下一題',
+        audioPath: './sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
         todos: [
           ...this.state.todos,
@@ -162,7 +167,8 @@ class Post extends Component {
           {
             id: 'ex' + PostData[newEx].sn,
             ab: '範例: ' + PostData[newEx].ab,
-            ch: '答案: ' + PostData[newEx].ch
+            ch: '答案: ' + PostData[newEx].ch,
+            lv: PostData[newEx].lv
           }
         ]
 
@@ -184,10 +190,10 @@ class Post extends Component {
 
     } else {
       console.log('產生答案')
-      this.state.todos[currentQ - 1].ch = '答案:' + PostData[quNum].ch;
+      this.state.todos[currentQ - 1].ch = '答案: ' + PostData[quNum].ch;
       this.setState({
-
-        audioPath: '../sound/right.mp3',
+        text2:'答對了，繼續下一題',
+        audioPath: './sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
         // todos: [   ...this.state.todos, {     id: 'answer' + PostData[quNum].sn, ab:
         // '',     ch: '答案: ' + PostData[quNum].ch   } ]
@@ -203,7 +209,7 @@ class Post extends Component {
     let audio = new Audio(this.state.audioPath)
     audio.play()
     if (currentQ == qAll) {
-      this.setState({text1: '全部答對了，練習結束', value: '', buttonCon: '再練習一次'})
+      this.setState({inputVisibility: false,text2:'', text1: '全部答對了，練習結束', value: '', buttonCon: '再練習一次'})
     } else {
       quNum = nextQ + generateUniqueRandom(maxNr) - 1;
       console.log('quNum:', quNum, 'nextQ:', nextQ, 'maxNr:', maxNr, 'haveIt:', haveIt)
@@ -241,34 +247,39 @@ class Post extends Component {
             // 傳回 jsx
             return (
               <li key={todo.id}>
-
-                <div>
-                  <div
-                    className={todo.qn
-                    ? 'class-a'
-                    : 'class-b'}>{todo.qn}.</div>
-                  <div
-                    className={todo.qn
-                    ? 'class-c'
-                    : 'class-a'}>{todo.ab}</div>
-                </div>
-
                 <div
-                  className={
-                    !todo.qn && todo.ch ? "class-a" : 'class-b'
-                   
-                    }
-                    
-                    >
-                     {todo.ch}</div>
+                  className={todo.lv
+                  ? 'class-d'
+                  : 'class-b'}>{todo.lv}</div>
+                <div
+                  className={todo.qn
+                  ? 'class-a'
+                  : 'class-b'}>{todo.qn}.</div>
+                <div className={todo.qn
+                  ? 'class-c'
+                  : null}>
+                  <div>{todo.ab}</div>
+
+                  <div
+                    className={todo.ch
+                    ? null
+                    : 'class-b'}>
+                    {todo.ch}</div>
+                </div>
               </li>
             );
           })
 }
         </ul>
+        <div className={this.state.text2
+                  ? 'class-e'
+                  : 'class-b'}>{this.state.text2}</div>
         <div className='wordBox'>
+
           {this.state.text1}<input
-            className='input'
+            className={this.state.inputVisibility
+        ? 'input'
+        : 'class-b'}
             type="text"
             value={this.state.value}
             onChange={this.handleChange}/>
