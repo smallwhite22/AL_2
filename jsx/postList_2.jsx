@@ -13,6 +13,9 @@ let cQ = 1;
 
 let nextQ = 0;
 
+//該類型前的資料數量，需經過qType和countQn()計算
+let directQ = 0;
+
 // 整理JSON內元素資料相同的個數，ex:第一個題型的總數為qAllTypeDic[1]。
 // 當最後一個題型為空的時候，!qAllTypeDic[?]會為true
 let qAllTypeDic = {},
@@ -22,7 +25,12 @@ for (var i = 0, l = PostData.length; i < l; i++) {
   qAllTypeDic[e.qc] = (qAllTypeDic[e.qc] || 0) + 1;
 }
 
-//題型總數 let qAllType = Object   .keys(qAllTypeDic)   .length; 總題數
+
+
+//題型總數 
+let qAllType = Object.keys(qAllTypeDic).length; 
+console.log('題型類型總共有:' + qAllType)
+//總題數
 let qAll = PostData.length;
 
 //同題型內有幾題
@@ -43,6 +51,7 @@ function generateUniqueRandom(maxNr) {
   if (!haveIt.includes(random) && random != 0 && random != 1) {
     haveIt.push(random);
     return random;
+    
   } else {
     if (haveIt.length < maxNr - 1) {
       //Recursively generate number
@@ -56,6 +65,13 @@ function generateUniqueRandom(maxNr) {
 
 function empty() {
   haveIt.length = 0;
+}
+
+function countQn(){
+  for(let i=1;i<=qType-1;i++){
+    directQ=directQ+qAllTypeDic[i]
+  }
+  console.log('i = ', directQ ,',該題型範例前的題目數量 = ', qAllTypeDic[i])
 }
 
 //隨機產生的題號
@@ -74,12 +90,17 @@ class Post extends Component {
       .handleChange
       .bind(this);
 
+      this.handleCopy = this
+      .handleCopy
+      .bind(this);
+
     this.doIt = this
       .doIt
       .bind(this);
 
     // 設定 state
     this.state = {
+      start: false,
       inputVisibility: true,
       audioPath: '',
       text1: '輸入答案:',
@@ -109,11 +130,22 @@ class Post extends Component {
   //抓取input輸入的值
   handleChange(e) {
     const value = e.target.value
-    this.setState({value: value})
+    this.setState({value: value});
+    
+    
   }
+
+  handleCopy(e){
+    e.preventDefault()
+    alert('不要複製貼上喔');
+    
+  }
+
+  
 
   //點下提交按鈕會先執行這個
   doIt(idx, array) {
+    countQn();
     //答對後執行的動作
     if (this.state.value == PostData[quNum].ch && currentQ < qAll) {
       currentQ = currentQ + 1;
@@ -139,6 +171,7 @@ class Post extends Component {
   }
 
   wrongSound(array, callback) {
+    console.log('i = ', directQ)
     this.setState({
       text2:'答錯了，再試一次',
       audioPath: './sound/wrong.mp3'
@@ -205,7 +238,7 @@ class Post extends Component {
   }
 
   doSecond(idx) {
-
+    
     let audio = new Audio(this.state.audioPath)
     audio.play()
     if (currentQ == qAll) {
@@ -282,7 +315,7 @@ class Post extends Component {
         : 'class-b'}
             type="text"
             value={this.state.value}
-            onChange={this.handleChange}/>
+            onChange={this.handleChange} onPaste={this.handleCopy}/>
 
           <button className='btn1' onClick={this.doIt}>{this.state.buttonCon}</button>
         </div>
