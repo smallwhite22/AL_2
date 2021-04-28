@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import PostData from '../JSON/1/a1.json';
 import Highlighter from "react-highlight-words";
 
-//題型
-let qType = 1;
+//題型編號
+let qType = 0;
 //不重覆亂數的容器
 let haveIt = [];
 
@@ -36,14 +36,21 @@ let qAll = PostData.length;
 
 //同題型內有幾題
 let maxNr = PostData
-  .filter(PostData => PostData.qc === qType)
+  .filter(PostData => PostData.qc == qType)
   .length;
-
+console.log('maxNr: ', maxNr)
 let newEx = qAllTypeDic[qType];
+
+function QuestionNumber() {
+  maxNr = PostData
+    .filter(PostData => PostData.qc == qType)
+    .length;
+}
 
 //產生不重複的隨機數字
 function generateUniqueRandom(maxNr) {
   //Generate random number
+
   let random = (Math.random() * maxNr).toFixed();
 
   //Coerce to number by boxing
@@ -76,8 +83,7 @@ function countQn() {
 }
 
 //隨機產生的題號
-let quNum = generateUniqueRandom(maxNr) - 1;
-console.log('quNum:', quNum, 'haveIt:', haveIt)
+let quNum = 0;
 
 class Post extends Component {
   // 建構子，每個 class 第一次產生時都會執行到這邊
@@ -86,6 +92,10 @@ class Post extends Component {
 
     // 這一行有點難解釋，想深入研究的麻煩自己查資料
     //
+
+    this.gotoQuestion = this
+      .gotoQuestion
+      .bind(this);
 
     this.handleChange = this
       .handleChange
@@ -108,18 +118,12 @@ class Post extends Component {
       text2: '',
       buttonCon: '送出答案',
       value: '',
-      searchText:PostData[0].ab,
-      textToHighlight:PostData[0].ch,
+      searchText: PostData[0].ab,
+      textToHighlight: PostData[0].ch,
       activeIndex: -1,
       caseSensitive: false,
       todos: [
         {
-          id: PostData[0].n,
-          ab: '範例: ' + PostData[0].ab,
-          ch: '答案: ' + PostData[0].ch,
-          qn: '',
-          lv: PostData[0].lv
-        }, {
           id: PostData[quNum].n,
           ab: '題目: ' + PostData[quNum].ab,
           ch: '',
@@ -265,114 +269,57 @@ class Post extends Component {
     window.scrollTo(0, document.body.scrollHeight);
   }
 
+  gotoQuestion = (ev, idx, array) => {
+    qType = ev.currentTarget.value
+
+    countQn()
+    QuestionNumber()
+    this.setState({start: true})
+    this.doQuestionFirst(array, () => this.doQuestionSecond(idx));
+    console.log('directQ: ', directQ, 'start', this.state.start, 'quNum: ', quNum, 'maxNr: ', maxNr)
+  }
+
+  doQuestionFirst(array, callback) {
+    quNum = directQ + generateUniqueRandom(maxNr) - 1
+
+    this.setState({
+      searchText: PostData[directQ].ab,
+      textToHighlight: PostData[directQ].ch
+    }, callback)
+  }
+  doQuestionSecond(idx) {
+    console.log('qType: ', qType, 'directQ: ', directQ, 'start', this.state.start, 'quNum: ', quNum, 'maxNr: ', maxNr)
+  }
+
   render() {
-
-    // 從 state 取出資料
-    let todos = this.state.todos;
-    let answers = this.state.answers;
-
     return (
-
       <div>
-
-      <div>
-
-      <ul className='list'>
-          {todos.map((todo) => {
-
-            // 傳回 jsx
-            return (
-              <li key={todo.id}>
-                <div
-                  className={todo.lv
-                  ? 'class-d'
-                  : 'class-b'}>{todo.lv}</div>
-                <div
-                  className={todo.qn
-                  ? 'class-a'
-                  : 'class-b'}>{todo.qn}.</div>
-                <div className={todo.qn
-                  ? 'class-c'
-                  : null}>
-                  <div>{todo.ab}</div>
-
-                  <div
-                    className={todo.ch
-                    ? null
-                    : 'class-b'}>
-                    {todo.ch}
-
-                  </div>
-                </div>
-              </li>
-            );
-          })
+        <div className={this.state.start
+          ? 'hide'
+          : null}>
+          <ul>
+            {PostData
+              .filter(qabtn => qabtn.qa == 1)
+              .map(PostData => <li key={PostData.en}>
+                <button onClick={this.gotoQuestion} value={PostData.qc}>{PostData.lv}</button>
+              </li>)
 }
-        </ul>
-          
-           
-      </div>
-        <div>
-
-        <Highlighter
-    highlightClassName="color-red"
-    searchWords={[this.state.searchText]}
-    autoEscape={true}
-    textToHighlight={this.state.textToHighlight}
-  /> 
+          </ul>
         </div>
-
-        <ul className='list'>
-          {todos.map((todo) => {
-
-            // 傳回 jsx
-            return (
-              <li key={todo.id}>
-                <div
-                  className={todo.lv
-                  ? 'class-d'
-                  : 'class-b'}>{todo.lv}</div>
-                <div
-                  className={todo.qn
-                  ? 'class-a'
-                  : 'class-b'}>{todo.qn}.</div>
-                <div className={todo.qn
-                  ? 'class-c'
-                  : null}>
-                  <div>{todo.ab}</div>
-
-                  <div
-                    className={todo.ch
-                    ? null
-                    : 'class-b'}>
-                    {todo.ch}
-
-                  </div>
-                </div>
-              </li>
-            );
-          })
-}
-        </ul>
-        <div className={this.state.text2
-          ? 'class-e'
-          : 'class-b'}>{this.state.text2}</div>
-        <div className='wordBox'>
-
-          {this.state.text1}<input
-            className={this.state.inputVisibility
-        ? 'input'
-        : 'class-b'}
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-            onPaste={this.handleCopy}/>
-
-          <button className='btn1' onClick={this.doIt}>{this.state.buttonCon}</button>
+        <div className={this.state.start
+          ? null
+          : 'hide'}>
+          <div className={'color-red'}>{this.state.searchText}</div>
+          <div><Highlighter
+            highlightClassName="color-red"
+            searchWords={[this.state.searchText]}
+            autoEscape={true}
+            textToHighlight={this.state.textToHighlight}/>
+          </div>
         </div>
-
       </div>
-    );
+    )
+
   }
 }
 

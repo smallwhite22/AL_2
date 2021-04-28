@@ -25,36 +25,6 @@ body {
   height: 5px;
 }
 
-.list {
-  padding: 50px 50px 20px 50px;
-}
-
-.list li {
-  margin-bottom: 20px;
-}
-
-.list li div {
-  border-radius: 5px;
-}
-
-.list li div div:nth-child(1) {
-  background-color: #FFF9E1;
-  padding: 15px;
-}
-
-.list li div div:nth-child(2) {
-  background-color: #fff2be;
-  padding: 15px;
-}
-
-.wordBox {
-  margin-bottom: 50px;
-  background: #fff2be;
-  margin: 0px 50px 0 50px;
-  border-radius: 5px;
-  padding: 20px 10px;
-}
-
 .input {
   width: 640px;
   height: 40px;
@@ -70,43 +40,14 @@ body {
   background-color: #fff2be;
 }
 
-.btn1 {
-  margin-left: 20px;
-  position: relative;
-  top: -3px;
-  font-size: 16px;
+.hide {
+  visibility: hidden;
+  height: 0;
 }
 
 .color-red {
   color: red;
   background-color: transparent;
-}
-
-.class-a {
-  float: left;
-}
-
-.class-b {
-  padding: 0 !important;
-  visibility: hidden;
-  width: 0;
-  height: 0;
-}
-
-.class-c {
-  margin-left: 30px;
-}
-
-.class-d {
-  font-weight: 1000;
-  font-size: 28px;
-  margin-bottom: 20px;
-  margin-top: 40px;
-}
-
-.class-e {
-  margin-left: 50px;
-  margin-bottom: 5px;
 }
 
 button {
@@ -187,4 +128,4 @@ button.btn1:active::before {
 audio {
   visibility: hidden;
 }
-/*# sourceMappingURL=adiolingual.css.map */
+/*# sourceMappingURL=adiolingual_3.css.map */

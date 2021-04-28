@@ -30,44 +30,7 @@ body {
     height: 5px;
 }
 
-.list {
-    padding: 50px 50px 20px 50px;
-    
 
-    li {
-        margin-bottom: 20px;
-      div:nth-child(1){
-
-      }
-      
-     div{
-
-    // padding: 15px;
-     border-radius: 5px;
-       div:nth-child(1){
-         background-color: $bkg-color1;
-         padding: 15px;
-       }
-       div:nth-child(2){
-        background-color: $bkg-color2;
-        padding: 15px;
-      }
-     }
-       
-        
-    }
-
-}
-
-.wordBox {
-    margin-bottom: 50px;
-    background: #fff2be;
-    margin: 0px 50px 0 50px;
-    border-radius: 5px;
-    padding: 20px 10px;
-    button {
-    }
-}
 
 .input {
     width: 640px;
@@ -85,52 +48,16 @@ body {
   background-color: #fff2be;
 }
 
-.btn1 {
-    margin-left: 20px;
-    position: relative;
-    top: -3px;
-    font-size: 16px;
+.hide {
+  visibility: hidden;
+  height: 0;
+
 }
 
 .color-red{
   color: red;
   background-color: transparent;
 }
-
-.class-a {
-
-  float: left;
-  
-    
-}
-.class-b{
-
-  // height: 0 ;
-  padding: 0 !important;
-  // margin: 0 !important;
-  // background: #fff !important;
-  visibility: hidden;
-  width: 0;
-  height: 0;
-
-}
-.class-c {
-
-    margin-left: 30px;
-    
-}
-.class-d {
-
-  font-weight: 1000;
-  font-size: 28px;
-  margin-bottom: 20px;
-  margin-top: 40px;
-}
-.class-e{
-  margin-left: 50px;
-  margin-bottom: 5px;
-}
-
 button {
     position: relative;
     display: inline-block;
