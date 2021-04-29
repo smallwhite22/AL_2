@@ -10,7 +10,7 @@ let haveIt = [];
 //目前所在的題號
 let currentQ = 1;
 
-let cQ = 1;
+let cQ = 0;
 
 let nextQ = 0;
 
@@ -109,6 +109,14 @@ class Post extends Component {
       .doIt
       .bind(this);
 
+    this.showExample = this
+      .showExample
+      .bind(this);
+
+    this.showQuestion = this
+      .showQuestion
+      .bind(this);
+
     // 設定 state
     this.state = {
       start: false,
@@ -118,18 +126,16 @@ class Post extends Component {
       text2: '',
       buttonCon: '送出答案',
       value: '',
+      topic: '',
       searchText: PostData[0].ab,
       textToHighlight: PostData[0].ch,
       activeIndex: -1,
       caseSensitive: false,
-      todos: [
-        {
-          id: PostData[quNum].n,
-          ab: '題目: ' + PostData[quNum].ab,
-          ch: '',
-          qn: '1'
-        }
-      ]
+      question: '',
+      answer: '',
+      btnCon: '顯示範例答案',
+      show1: false,
+      show2: false
     }
     console.log(this.state.todos)
   }
@@ -198,17 +204,6 @@ class Post extends Component {
       this.setState({
         text2: '答對了，繼續下一題', audioPath: './sound/right.mp3',
         // ES6 語法，就等於是把 todos 新增一個 item
-        todos: [
-          ...this.state.todos,
-          // {   id: 'answer' + PostData[quNum].sn,   ab: '',   ch: '答案: ' +
-          // PostData[quNum].ch },
-          {
-            id: 'ex' + PostData[newEx].sn,
-            ab: '範例: ' + PostData[newEx].ab,
-            ch: '答案: ' + PostData[newEx].ch,
-            lv: PostData[newEx].lv
-          }
-        ]
 
       }, callback);
 
@@ -255,14 +250,7 @@ class Post extends Component {
       this.setState({
         value: '',
         // ES6 語法，就等於是把 todos 新增一個 item
-        todos: [
-          ...this.state.todos, {
-            id: PostData[quNum].sn,
-            ab: '題目: ' + PostData[quNum].ab,
-            ch: '',
-            qn: cQ
-          }
-        ]
+
       })
     }
     console.log(this.state.todos)
@@ -284,11 +272,22 @@ class Post extends Component {
 
     this.setState({
       searchText: PostData[directQ].ab,
-      textToHighlight: PostData[directQ].ch
+      textToHighlight: PostData[directQ].ch,
+      topic: PostData[directQ].lv
     }, callback)
   }
   doQuestionSecond(idx) {
     console.log('qType: ', qType, 'directQ: ', directQ, 'start', this.state.start, 'quNum: ', quNum, 'maxNr: ', maxNr)
+  }
+
+  showExample() {
+
+    this.setState({show1: true, btnCon: '顯示題目'})
+
+  }
+  showQuestion() {
+    cQ=cQ+1;
+    this.setState({show2: true, question: PostData[quNum].ab})
   }
 
   render() {
@@ -297,7 +296,7 @@ class Post extends Component {
         <div className={this.state.start
           ? 'hide'
           : null}>
-          <ul>
+          <ul className={'css_topic'}>
             {PostData
               .filter(qabtn => qabtn.qa == 1)
               .map(PostData => <li key={PostData.en}>
@@ -309,12 +308,36 @@ class Post extends Component {
         <div className={this.state.start
           ? null
           : 'hide'}>
+          <div>{this.state.topic}</div>
           <div className={'color-red'}>{this.state.searchText}</div>
-          <div><Highlighter
+          <div
+            className={this.state.show1
+            ? 'fade-in'
+            : 'opacity0'}><Highlighter
             highlightClassName="color-red"
             searchWords={[this.state.searchText]}
             autoEscape={true}
             textToHighlight={this.state.textToHighlight}/>
+          </div>
+          <div
+            className={this.state.show2
+            ? 'fade-in'
+            : 'opacity0'}>
+            <div>{cQ}/{maxNr}</div>
+            <div>{this.state.question}</div>
+            <div>{this.state.answer}</div>
+          </div>
+          <div>
+            <button
+              onClick={this.showExample}
+              className={this.state.show1
+              ? 'hide'
+              : null}>{this.state.btnCon}</button>
+            <button
+              onClick={this.showQuestion}
+              className={this.state.show1
+              ? null
+              : 'hide'}>{this.state.btnCon}</button>
           </div>
         </div>
       </div>

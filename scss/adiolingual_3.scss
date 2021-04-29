@@ -51,23 +51,59 @@ body {
 .hide {
   visibility: hidden;
   height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  border:0;
+}
 
+.css_topic{
+ 
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap:wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: flex-start;
+    justify-content: space-around;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: flex-start;
+    align-content: flex-start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: flex-start;
+    align-items: flex-start;
+
+    li{
+      justify-content: space-between;
+      margin: 20px 0px;
+    }
+  
 }
 
 .color-red{
   color: red;
   background-color: transparent;
 }
+
+.opacity0{
+  opacity: 0;
+}
 button {
     position: relative;
-    display: inline-block;
+    padding: 20px 40px;
     cursor: pointer;
     outline: none;
-    border: 0;
+    border: 2;
     vertical-align: middle;
     text-decoration: none;
     font-size: inherit;
     font-family: inherit;
+    background-color: white;
     &.btn1 {
       font-weight: 600;
       color: $text;
@@ -116,3 +152,29 @@ button {
     visibility: hidden;
   }
 
+  @mixin anim($name, $duration) {
+    .#{$name} {
+      animation-name: $name;
+      animation-duration: $duration;
+      // 其它 animation property 的屬性...
+    }
+  }
+  //動態設定
+  .fade-in{
+    position: relative;
+    animation: fade 0.5s;
+  }
+@keyframes fade{
+    0% {
+      transform: translate(0, 2px);
+      opacity: 0;
+    }
+    100%{
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+  }
+
+  
+
+  //動態設定結束

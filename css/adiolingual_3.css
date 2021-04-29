@@ -43,6 +43,36 @@ body {
 .hide {
   visibility: hidden;
   height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.css_topic {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-pack: flex-start;
+  justify-content: space-around;
+  -ms-flex-line-pack: flex-start;
+  align-content: flex-start;
+  -ms-flex-align: flex-start;
+  -webkit-box-align: start;
+          align-items: flex-start;
+}
+
+.css_topic li {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 20px 0px;
 }
 
 .color-red {
@@ -50,16 +80,21 @@ body {
   background-color: transparent;
 }
 
+.opacity0 {
+  opacity: 0;
+}
+
 button {
   position: relative;
-  display: inline-block;
+  padding: 20px 40px;
   cursor: pointer;
   outline: none;
-  border: 0;
+  border: 2;
   vertical-align: middle;
   text-decoration: none;
   font-size: inherit;
   font-family: inherit;
+  background-color: white;
 }
 
 button.btn1 {
@@ -127,5 +162,37 @@ button.btn1:active::before {
 
 audio {
   visibility: hidden;
+}
+
+.fade-in {
+  position: relative;
+  -webkit-animation: fade 0.5s;
+          animation: fade 0.5s;
+}
+
+@-webkit-keyframes fade {
+  0% {
+    -webkit-transform: translate(0, 2px);
+            transform: translate(0, 2px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  0% {
+    -webkit-transform: translate(0, 2px);
+            transform: translate(0, 2px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+    opacity: 1;
+  }
 }
 /*# sourceMappingURL=adiolingual_3.css.map */
