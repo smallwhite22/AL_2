@@ -40,15 +40,6 @@ body {
   background-color: #fff2be;
 }
 
-.hide {
-  visibility: hidden;
-  height: 0;
-  width: 0;
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-
 .css_topic {
   display: -ms-flexbox;
   display: -webkit-box;
@@ -72,6 +63,7 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  width: 30%;
   margin: 20px 0px;
 }
 
@@ -194,5 +186,14 @@ audio {
             transform: translate(0, 0);
     opacity: 1;
   }
+}
+
+.hide {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 /*# sourceMappingURL=adiolingual_3.css.map */

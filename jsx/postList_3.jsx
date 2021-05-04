@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
-import PostData from '../JSON/1/a1.json';
+//import PostData from '../JSON/1/a1.json';
 import Highlighter from "react-highlight-words";
 
+//JSON檔案路徑
+let postPath = 1;
+const PostData = require('../JSON/1/a' + postPath + '.json');
 //題型編號
 let qType = 0;
 //不重覆亂數的容器
 let haveIt = [];
 
-//目前所在的題號
-let currentQ = 1;
-
 let cQ = 0;
-
-let nextQ = 0;
 
 //該類型前的資料數量，需經過qType和countQn()計算
 let directQ = 0;
@@ -31,14 +29,12 @@ let qAllType = Object
   .keys(qAllTypeDic)
   .length;
 console.log('題型類型總共有:' + qAllType)
-//總題數
-let qAll = PostData.length;
 
 //同題型內有幾題
 let maxNr = PostData
   .filter(PostData => PostData.qc == qType)
   .length;
-console.log('maxNr: ', maxNr)
+
 let newEx = qAllTypeDic[qType];
 
 function QuestionNumber() {
@@ -71,10 +67,6 @@ function generateUniqueRandom(maxNr) {
   }
 }
 
-function empty() {
-  haveIt.length = 0;
-}
-
 function countQn() {
   for (let i = 1; i <= qType - 1; i++) {
     directQ = directQ + qAllTypeDic[i]
@@ -92,6 +84,9 @@ class Post extends Component {
 
     // 這一行有點難解釋，想深入研究的麻煩自己查資料
     //
+    this.sendAnswer = this
+      .sendAnswer
+      .bind(this);
 
     this.gotoQuestion = this
       .gotoQuestion
@@ -105,16 +100,16 @@ class Post extends Component {
       .handleCopy
       .bind(this);
 
-    this.doIt = this
-      .doIt
-      .bind(this);
-
     this.showExample = this
       .showExample
       .bind(this);
 
     this.showQuestion = this
       .showQuestion
+      .bind(this);
+
+    this.nextQuestion = this
+      .nextQuestion
       .bind(this);
 
     // 設定 state
@@ -135,9 +130,12 @@ class Post extends Component {
       answer: '',
       btnCon: '顯示範例答案',
       show1: false,
-      show2: false
+      show2: false,
+      show3: false,
+      correct: false,
+      resultPicPath: ''
     }
-    console.log(this.state.todos)
+
   }
 
   componentDidMount() {}
@@ -150,43 +148,17 @@ class Post extends Component {
   }
 
   handleCopy(e) {
-    e.preventDefault()
-    alert('不要複製貼上喔');
+    // e.preventDefault() alert('不要複製貼上喔');
 
   }
 
   //點下提交按鈕會先執行這個
-  doIt(idx, array) {
-    countQn();
-    //答對後執行的動作
-    if (this.state.value == PostData[quNum].ch && currentQ < qAll) {
-      currentQ = currentQ + 1;
-      cQ = cQ + 1;
-      this.doFirst(array, () => this.doSecond(idx));
-      //答錯後執行的動作
-    } else if (currentQ > qAll) {
-      window
-        .location
-        .reload();
-      console.log('重整頁面')
-    } else if (this.state.value != PostData[quNum].ch && currentQ < qAll) {
-
-      this.wrongSound(array, () => this.playWrongSound(idx));
-
-    } else {
-      window
-        .location
-        .reload();
-      console.log('重整頁面')
-    }
-
-  }
 
   wrongSound(array, callback) {
     console.log('i = ', directQ)
     this.setState({
-      text2: '答錯了，再試一次',
-      audioPath: './sound/wrong.mp3'
+      audioPath: './sound/wrong.mp3',
+      resultPicPath: './images/pic-wrong.png'
     }, callback)
 
   }
@@ -194,67 +166,29 @@ class Post extends Component {
     let audio = new Audio(this.state.audioPath)
     audio.play()
   }
-
-  doFirst(array, callback) {
-
-    if (cQ == qAllTypeDic[qType] && currentQ < qAll) {
-      console.log('產生題目，下一個範例個題號:', newEx)
-      this.state.todos[currentQ - 1].ch = '答案: ' + PostData[quNum].ch;
-      currentQ = currentQ + 1;
+  rightSound(array, callback) {
+    if (cQ < maxNr - 1) {
       this.setState({
-        text2: '答對了，繼續下一題', audioPath: './sound/right.mp3',
-        // ES6 語法，就等於是把 todos 新增一個 item
-
-      }, callback);
-
-      qType = qType + 1;
-
-      //下列參數設定有錯
-      nextQ = qAllTypeDic[qType - 1] + nextQ;
-      newEx = qAllTypeDic[qType] + newEx;
-      cQ = 1;
-
-      empty();
-      maxNr = PostData
-        .filter(PostData => PostData.qc === qType)
-        .length;
-      console.log('亂數陣列清空', maxNr // if (currentQ > qAll) {   alert('練習完成') }
-      )
-
-    } else {
-      console.log('產生答案')
-      this.state.todos[currentQ - 1].ch = '答案: ' + PostData[quNum].ch;
-      this.setState({
-        text2: '答對了，繼續下一題', audioPath: './sound/right.mp3',
-        // ES6 語法，就等於是把 todos 新增一個 item
-        // todos: [   ...this.state.todos, {     id: 'answer' + PostData[quNum].sn, ab:
-        // '',     ch: '答案: ' + PostData[quNum].ch   } ]
-
+        audioPath: './sound/right.mp3',
+        resultPicPath: './images/pic-right.png',
+        correct: true,
+        show2: false,
+        btnCon: '下一題'
       }, callback)
-
+    } else {
+      this.setState({
+        audioPath: './sound/right.mp3',
+        resultPicPath: './images/pic-right.png',
+        correct: true,
+        show2: false,
+        btnCon: '其他題型'
+      }, callback)
     }
 
   }
-
-  doSecond(idx) {
-
+  playRightSound(idx) {
     let audio = new Audio(this.state.audioPath)
     audio.play()
-    if (currentQ == qAll) {
-      this.setState({inputVisibility: false, text2: '', text1: '全部答對了，練習結束', value: '', buttonCon: '再練習一次'})
-    } else {
-      quNum = nextQ + generateUniqueRandom(maxNr) - 1;
-      console.log('quNum:', quNum, 'nextQ:', nextQ, 'maxNr:', maxNr, 'haveIt:', haveIt)
-      console.log('cQ:', cQ, 'currentQ:', currentQ, 'qAll:', qAll, 'qAllTypeDic[qType]:', qAllTypeDic[qType])
-      // 亂數隨機產生一個 id 設定 state
-      this.setState({
-        value: '',
-        // ES6 語法，就等於是把 todos 新增一個 item
-
-      })
-    }
-    console.log(this.state.todos)
-    window.scrollTo(0, document.body.scrollHeight);
   }
 
   gotoQuestion = (ev, idx, array) => {
@@ -282,13 +216,48 @@ class Post extends Component {
 
   showExample() {
 
-    this.setState({show1: true, btnCon: '顯示題目'})
+    this.setState({show1: true, show2: true, btnCon: '顯示題目'})
 
   }
   showQuestion() {
-    cQ=cQ+1;
-    this.setState({show2: true, question: PostData[quNum].ab})
+    cQ = cQ + 1
+    this.setState({show2: false, show3: true, question: PostData[quNum].ab, answer: PostData[quNum].ch})
   }
+
+  sendAnswer(idx, array) {
+    if (this.state.value == this.state.answer && cQ < maxNr) {
+      this.rightSound(array, () => this.playRightSound(idx));
+    } else if (this.state.value != this.state.answer) {
+      this.wrongSound(array, () => this.playWrongSound(idx));
+    }
+
+  }
+
+  nextQuestion(idx, array) {
+    if (cQ < maxNr - 1) {
+      cQ = cQ + 1
+      quNum = directQ + generateUniqueRandom(maxNr) - 1
+      this.next1(array, () => this.next2(idx));
+    } else {
+      window
+        .location
+        .reload();
+    }
+  }
+
+  next1(array, callback) {
+
+    this.setState({
+      show2: false,
+      correct: false,
+      question: PostData[quNum].ab,
+      answer: PostData[quNum].ch,
+      resultPicPath: '',
+      value: ''
+    }, callback)
+
+  }
+  next2(idx) {}
 
   render() {
     return (
@@ -299,7 +268,7 @@ class Post extends Component {
           <ul className={'css_topic'}>
             {PostData
               .filter(qabtn => qabtn.qa == 1)
-              .map(PostData => <li key={PostData.en}>
+              .map(PostData => <li key={PostData.sn}>
                 <button onClick={this.gotoQuestion} value={PostData.qc}>{PostData.lv}</button>
               </li>)
 }
@@ -320,12 +289,14 @@ class Post extends Component {
             textToHighlight={this.state.textToHighlight}/>
           </div>
           <div
-            className={this.state.show2
+            className={this.state.show3
             ? 'fade-in'
             : 'opacity0'}>
-            <div>{cQ}/{maxNr}</div>
+            <div>{cQ}/{maxNr - 1}</div>
             <div>{this.state.question}</div>
-            <div>{this.state.answer}</div>
+            <div className={this.state.correct
+              ? null
+              : 'hide'}>{this.state.answer}</div>
           </div>
           <div>
             <button
@@ -335,10 +306,29 @@ class Post extends Component {
               : null}>{this.state.btnCon}</button>
             <button
               onClick={this.showQuestion}
-              className={this.state.show1
+              className={this.state.show2
               ? null
               : 'hide'}>{this.state.btnCon}</button>
           </div>
+          <div
+            className={this.state.show3 && !this.state.correct
+            ? null
+            : 'hide'}>
+
+            輸入答案:<input
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+              onPaste={this.handleCopy}/>
+
+            <button className='btn1' onClick={this.sendAnswer}>{this.state.buttonCon}</button>
+          </div>
+          <div className={this.state.correct
+            ? null
+            : 'hide'}>
+            <button onClick={this.nextQuestion}>{this.state.btnCon}</button>
+          </div>
+          <div><img src={this.state.resultPicPath}/></div>
         </div>
       </div>
     )

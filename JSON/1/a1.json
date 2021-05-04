@@ -4,119 +4,108 @@
         "qa": 1,
         "sn": 1,
         "ab": "wacu",
-        "ch": "Ira ku wacu nu maku.",
+        "ch": "Ira ko waco no mako cecay.",
         "en": "one",
-        "lv": "題型一 擁有句",
-        "ex": true
+        "lv": "題型一 擁有句"
     },
     {
         "n": "01-02",
         "qc": 1,
         "qa": 2,
         "sn": 2,
-        "ab": "nani",
-        "ch": "Ira ku nani nu maku.",
+        "ab": "posi",
+        "ch": "Ira ko posi no mako cecay.",
         "en": "two",
-        "lv": "初級",
-        "ex": false
+        "lv": "初級"
     },
     {
         "n": "01-03",
         "qc": 1,
         "qa": 3,
         "sn": 3,
-        "ab": "rarapa",
-        "ch": "Ira ku rarapa nu maku.",
+        "ab": "kolong",
+        "ch": "Ira ko kolong no mako cecay.",
         "en": "three",
-        "lv": "初級",
-        "ex": false
+        "lv": "初級"
     },
     {
         "n": "01-04",
         "qc": 1,
         "qa": 4,
         "sn": 4,
-        "ab": "vavuy",
-        "ch": "Ira ku vavuy nu maku.",
+        "ab": "fafoy",
+        "ch": "Ira ko fafoy no mako cecay.",
         "en": "four",
-        "lv": "初級",
-        "ex": false
+        "lv": "初級"
     },
     {
         "n": "01-05",
         "qc": 2,
         "qa": 1,
         "sn": 5,
-        "ab": "cudad",
-        "ch": "Ira ku cudad nu heni.",
+        "ab": "codad",
+        "ch": "Ira ko codad naira.",
         "en": "five",
-        "lv": "題型二 擁有句(他們)",
-        "ex": false
+        "lv": "題型二 擁有句(他們)"
     },
     {
         "n": "02-01",
         "qc": 2,
         "qa": 2,
         "sn": 6,
-        "ab": "savuric ",
-        "ch": "Ira ku savuric nu heni.",
+        "ab": "impic",
+        "ch": "Ira ko impic naira.",
         "en": "six",
-        "lv": "初級",
-        "ex": true
+        "lv": "初級"
     },
     {
         "n": "02-02",
         "qc": 2,
         "qa": 3,
         "sn": 7,
-        "ab": "tuki ",
-        "ch": "Ira ku tuki nu heni.",
+        "ab": "sasisit",
+        "ch": "Ira ko sasisit naira.",
         "en": "seven",
-        "lv": "初級",
-        "ex": false
+        "lv": "初級"
     },
     {
         "n": "02-03",
         "qc": 2,
         "qa": 4,
         "sn": 8,
-        "ab": "sapisurit",
-        "ch": "Ira ku sapisurit nu heni.",
+        "ab": "sapad",
+        "ch": "Ira ko sapad naira.",
         "en": "eight",
-        "lv": "初級",
-        "ex": false
+        "lv": "初級"
     },
     {
         "n": "02-04",
         "qc": 3,
         "qa": 1,
         "sn": 9,
-        "ab": "vunga",
-        "ch": "Ira haw ku vunga nu misu?",
+        "ab": "fonga",
+        "ch": "Ira ko fonga no miso haw?",
         "en": "nine",
-        "lv": "題型三 擁有句(問句)",
-        "ex": false
+        "lv": "題型三 擁有句(問句)"
     },
     {
         "n": "03-01",
         "qc": 3,
         "qa": 2,
         "sn": 10,
-        "ab": "taviras ",
-        "ch": "Ira haw ku taviras nu misu?",
+        "ab": "kilang",
+        "ch": "Ira ko kilang no miso haw?",
         "en": "ten",
-        "lv": "初級",
-        "ex": true
+        "lv": "初級"
     },
     {
         "n": "03-02",
         "qc": 3,
         "qa": 3,
         "sn": 11,
-        "ab": "tali",
-        "ch": "Ira haw ku tali nu misu?",
+        "ab": "panay",
+        "ch": "Ira ko panay no miso haw?",
         "en": "eleven",
-        "lv": "初級",
-        "ex": false
+        "lv": "初級"
     }
 ]
