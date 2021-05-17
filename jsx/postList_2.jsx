@@ -209,7 +209,6 @@ class Post extends Component {
       }, callback);
 
       qType = qType + 1;
-
       //下列參數設定有錯
       nextQ = qAllTypeDic[qType - 1] + nextQ;
       newEx = qAllTypeDic[qType] + newEx;

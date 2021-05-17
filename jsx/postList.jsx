@@ -1,6 +1,21 @@
 import React, {Component} from 'react';
 import PostData from '../JSON/1/test.json';
 
+const test={
+  1:5,2:4,3:2
+}
+
+let num = 0;
+
+console.log(test)
+for (var i = 1; i <= 3; i++) { 
+      
+  num = num + test[i]; 
+
+}
+
+console.log(num)
+
 class PostList extends Component {
 
   constructor(props) {

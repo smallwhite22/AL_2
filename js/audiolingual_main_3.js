@@ -31,13 +31,24 @@ eval("module.exports = JSON.parse('[{\"n\":\"01-01\",\"qc\":1,\"qa\":1,\"sn\":1,
 
 /***/ }),
 
+/***/ "./JSON/1/audio_b1.json":
+/*!******************************!*\
+  !*** ./JSON/1/audio_b1.json ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+eval("module.exports = JSON.parse('[{\"n\":1,\"path\":\"./sound/A_1.mp3\",\"role\":\"A\",\"rn\":1,\"ab\":\"Cilimaw kiso anocila^ a dadaya^ haw?\",\"ch\":\"你明天晚上有空嗎？\"},{\"n\":2,\"path\":\"./sound/B_1.mp3\",\"role\":\"B\",\"rn\":1,\"ab\":\"Hay, cilimaw kako. Mimaan kita saw?\",\"ch\":\"是，我有空，我們要做甚麼呢？\"},{\"n\":3,\"path\":\"./sound/A_2.mp3\",\"role\":\"A\",\"rn\":2,\"ab\":\"Malacafay kita a malafi^. Nga’ay to haw?\",\"ch\":\"我們一起吃晚餐好嗎？\"},{\"n\":4,\"path\":\"./sound/B_2.mp3\",\"role\":\"B\",\"rn\":2,\"ab\":\"Hay, pinaay ko toki^?\",\"ch\":\"好啊，幾點呢？\"},{\"n\":5,\"path\":\"./sound/A_3.mp3\",\"role\":\"A\",\"rn\":3,\"ab\":\"Enemay ko toki^.\",\"ch\":\"六點鐘\"},{\"n\":6,\"path\":\"./sound/B_3.mp3\",\"role\":\"B\",\"rn\":3,\"ab\":\"Icowa^ kita a malafi^ saw?\",\"ch\":\"我們要在哪裡吃晚餐呢？\"},{\"n\":7,\"path\":\"./sound/A_4.mp3\",\"role\":\"A\",\"rn\":4,\"ab\":\"Tayra kita i patiyamay a malafi^, nga’ay to haw?\",\"ch\":\"我們去街上吃晚餐，好嗎?\"},{\"n\":8,\"path\":\"./sound/B_4.mp3\",\"role\":\"B\",\"rn\":4,\"ab\":\"Hay, enemay toki^ to dadaya^ a masaso’araw kita itira.\",\"ch\":\"好的，我們晚上六點那裡見面。\"}]');\n\n//# sourceURL=webpack://audiolingual/./JSON/1/audio_b1.json?");
+
+/***/ }),
+
 /***/ "./JSON/1 sync recursive ^\\.\\/a.*\\.json$":
 /*!**************************************!*\
   !*** ./JSON/1/ sync ^\.\/a.*\.json$ ***!
   \**************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("var map = {\n\t\"./a1.json\": \"./JSON/1/a1.json\",\n\t\"./a2.json\": \"./JSON/1/a2.json\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./JSON/1 sync recursive ^\\\\.\\\\/a.*\\\\.json$\";\n\n//# sourceURL=webpack://audiolingual/./JSON/1/_sync_^\\.\\/a.*\\.json$?");
+eval("var map = {\n\t\"./a1.json\": \"./JSON/1/a1.json\",\n\t\"./a2.json\": \"./JSON/1/a2.json\",\n\t\"./audio_b1.json\": \"./JSON/1/audio_b1.json\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./JSON/1 sync recursive ^\\\\.\\\\/a.*\\\\.json$\";\n\n//# sourceURL=webpack://audiolingual/./JSON/1/_sync_^\\.\\/a.*\\.json$?");
 
 /***/ }),
 

@@ -7,7 +7,8 @@ module.exports = {
         audiolingual_main_2:'/jsx/audiolingual_main_2.jsx',
         postList_2:'/jsx/postList_2.jsx',
         audiolingual_main_3:'/jsx/audiolingual_main_3.jsx',
-        postList_3:'/jsx/postList_3.jsx'
+        postList_3:'/jsx/postList_3.jsx',
+        test123:'/jsx/test123.jsx'
       },
       output: {
         path: path.resolve(__dirname, './js'),
