@@ -1,0 +1,110 @@
+[
+  {
+    "n": 1,
+    "tn": 1,
+    "qn": 1,
+    "keyw": "malafi^",
+    "ab": "Malacafay kita a malafi^. Nga’ay to haw?",
+    "ch": "我們一起吃晚餐好嗎？",
+    "fs": false
+  },
+  {
+    "n": 2,
+    "tn": 1,
+    "qn": 2,
+    "keyw": "malahok",
+    "ab": "Malacafay kita a malahok. Nga’ay to haw?",
+    "ch": "我們一起吃午餐好嗎？",
+    "fs": null
+  },
+  {
+    "n": 3,
+    "tn": 1,
+    "qn": 3,
+    "keyw": "maranam",
+    "ab": "Malacafay kita a maranam. Nga’ay to haw?",
+    "ch": "我們一起吃早餐好嗎？",
+    "fs": null
+  },
+  {
+    "n": 4,
+    "tn": 1,
+    "qn": 4,
+    "keyw": "midangoy",
+    "ab": "Malacafay kita a midangoy. Nga’ay to haw?",
+    "ch": "我們一起去游泳好嗎？",
+    "fs": null
+  },
+  {
+    "n": 5,
+    "tn": 1,
+    "qn": 5,
+    "keyw": "patiked",
+    "ab": "Malacafay kita a patiked. Nga’ay to haw?",
+    "ch": "我們一起去釣魚好嗎？",
+    "fs": null
+  },
+  {
+    "n": 6,
+    "tn": 1,
+    "qn": 6,
+    "keyw": "masakero^",
+    "ab": "Malacafay kita a masakero^. Nga’ay to haw?",
+    "ch": "我們一起去跳舞好嗎？",
+    "fs": null
+  },
+  {
+    "n": 7,
+    "tn": 1,
+    "qn": 7,
+    "keyw": "romadiw",
+    "ab": "Malacafay kita a romadiw. Nga’ay to haw?",
+    "ch": "我們一起去唱歌好嗎？",
+    "fs": null
+  },
+  {
+    "n": 8,
+    "tn": 1,
+    "qn": 8,
+    "keyw": "mirenaf",
+    "ab": "Malacafay kita a mirenaf. Nga’ay to haw?",
+    "ch": "我們一起去畫圖好嗎？",
+    "fs": null
+  },
+  {
+    "n": 9,
+    "tn": 1,
+    "qn": 9,
+    "keyw": "miradom",
+    "ab": "Malacafay kita a miradom. Nga’ay to haw?",
+    "ch": "我們一起去挑水好嗎？",
+    "fs": null
+  },
+  {
+    "n": 10,
+    "tn": 1,
+    "qn": 10,
+    "keyw": "mi’adop",
+    "ab": "Malacafay kita a mi’adop. Nga’ay to haw?",
+    "ch": "我們一起去狩獵好嗎?",
+    "fs": null
+  },
+  {
+    "n": 10,
+    "tn": 1,
+    "qn": 10,
+    "keyw": "midateng",
+    "ab": "Malacafay kita a midateng. Nga’ay to haw?",
+    "ch": "我們一起去採野菜好嗎?",
+    "fs": null
+  },
+  {
+    "n": 11,
+    "tn": 1,
+    "qn": 11,
+    "keyw": "mikasoy i lotok",
+    "ab": "Malacafay kita a mikasoy i lotok. Nga’ay to haw?",
+    "ch": "我們一起去山上砍柴好嗎?",
+    "fs": null
+  }
+]

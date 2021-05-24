@@ -189,6 +189,10 @@ class Post extends Component {
   playRightSound(idx) {
     let audio = new Audio(this.state.audioPath)
     audio.play()
+    audio.onended=function()
+{
+    alert("audio ended");
+}
   }
 
   gotoQuestion = (ev, idx, array) => {

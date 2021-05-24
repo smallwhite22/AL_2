@@ -1,7 +1,7 @@
 [
   {
     "n": 1,
-    "path": "./sound/A_1.mp3",
+    "path": "./sound/1/A_1.mp3",
     "role": "A",
     "rn": 1,
     "ab": "Cilimaw kiso anocila^ a dadaya^ haw?",
@@ -9,7 +9,7 @@
   },
   {
     "n": 2,
-    "path": "./sound/B_1.mp3",
+    "path": "./sound/1/B_1.mp3",
     "role": "B",
     "rn": 1,
     "ab": "Hay, cilimaw kako. Mimaan kita saw?",
@@ -17,7 +17,7 @@
   },
   {
     "n": 3,
-    "path": "./sound/A_2.mp3",
+    "path": "./sound/1/A_2.mp3",
     "role": "A",
     "rn": 2,
     "ab": "Malacafay kita a malafi^. Nga’ay to haw?",
@@ -25,7 +25,7 @@
   },
   {
     "n": 4,
-    "path": "./sound/B_2.mp3",
+    "path": "./sound/1/B_2.mp3",
     "role": "B",
     "rn": 2,
     "ab": "Hay, pinaay ko toki^?",
@@ -33,7 +33,7 @@
   },
   {
     "n": 5,
-    "path": "./sound/A_3.mp3",
+    "path": "./sound/1/A_3.mp3",
     "role": "A",
     "rn": 3,
     "ab": "Enemay ko toki^.",
@@ -41,7 +41,7 @@
   },
   {
     "n": 6,
-    "path": "./sound/B_3.mp3",
+    "path": "./sound/1/B_3.mp3",
     "role": "B",
     "rn": 3,
     "ab": "Icowa^ kita a malafi^ saw?",
@@ -49,7 +49,7 @@
   },
   {
     "n": 7,
-    "path": "./sound/A_4.mp3",
+    "path": "./sound/1/A_4.mp3",
     "role": "A",
     "rn": 4,
     "ab": "Tayra kita i patiyamay a malafi^, nga’ay to haw?",
@@ -57,7 +57,7 @@
   },
   {
     "n": 8,
-    "path": "./sound/B_4.mp3",
+    "path": "./sound/1/B_4.mp3",
     "role": "B",
     "rn": 4,
     "ab": "Hay, enemay toki^ to dadaya^ a masaso’araw kita itira.",

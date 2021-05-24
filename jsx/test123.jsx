@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
-
-const { getAudioDurationInSeconds } = require('get-audio-duration');
- 
-// From a local path...
-getAudioDurationInSeconds('./sound/A_1.mp3').then((duration) => {
-  console.log(duration);
-});
+//import offs from  'mp3-duration';
 
 let postPath = 1;
 const PostData = require('../JSON/1/a' + postPath + '.json');
