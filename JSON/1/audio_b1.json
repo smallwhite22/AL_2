@@ -2,65 +2,73 @@
   {
     "n": 1,
     "path": "./sound/1/A_1.mp3",
-    "role": "A",
+    "role": 1,
     "rn": 1,
     "ab": "Cilimaw kiso anocila^ a dadaya^ haw?",
-    "ch": "你明天晚上有空嗎？"
+    "ch": "你明天晚上有空嗎？",
+    "correct": false
   },
   {
     "n": 2,
     "path": "./sound/1/B_1.mp3",
-    "role": "B",
+    "role": 2,
     "rn": 1,
     "ab": "Hay, cilimaw kako. Mimaan kita saw?",
-    "ch": "是，我有空，我們要做甚麼呢？"
+    "ch": "是，我有空，我們要做甚麼呢？",
+    "correct": false
   },
   {
     "n": 3,
     "path": "./sound/1/A_2.mp3",
-    "role": "A",
+    "role": 1,
     "rn": 2,
     "ab": "Malacafay kita a malafi^. Nga’ay to haw?",
-    "ch": "我們一起吃晚餐好嗎？"
+    "ch": "我們一起吃晚餐好嗎？",
+    "correct": false
   },
   {
     "n": 4,
     "path": "./sound/1/B_2.mp3",
-    "role": "B",
+    "role": 2,
     "rn": 2,
     "ab": "Hay, pinaay ko toki^?",
-    "ch": "好啊，幾點呢？"
+    "ch": "好啊，幾點呢？",
+    "correct": false
   },
   {
     "n": 5,
     "path": "./sound/1/A_3.mp3",
-    "role": "A",
+    "role": 1,
     "rn": 3,
     "ab": "Enemay ko toki^.",
-    "ch": "六點鐘"
+    "ch": "六點鐘",
+    "correct": false
   },
   {
     "n": 6,
     "path": "./sound/1/B_3.mp3",
-    "role": "B",
+    "role": 2,
     "rn": 3,
     "ab": "Icowa^ kita a malafi^ saw?",
-    "ch": "我們要在哪裡吃晚餐呢？"
+    "ch": "我們要在哪裡吃晚餐呢？",
+    "correct": false
   },
   {
     "n": 7,
     "path": "./sound/1/A_4.mp3",
-    "role": "A",
+    "role": 1,
     "rn": 4,
     "ab": "Tayra kita i patiyamay a malafi^, nga’ay to haw?",
-    "ch": "我們去街上吃晚餐，好嗎?"
+    "ch": "我們去街上吃晚餐，好嗎?",
+    "correct": false
   },
   {
     "n": 8,
     "path": "./sound/1/B_4.mp3",
-    "role": "B",
+    "role": 2,
     "rn": 4,
     "ab": "Hay, enemay toki^ to dadaya^ a masaso’araw kita itira.",
-    "ch": "好的，我們晚上六點那裡見面。"
+    "ch": "好的，我們晚上六點那裡見面。",
+    "correct": false
   }
 ]
