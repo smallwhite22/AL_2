@@ -6,7 +6,9 @@
     "keyw": "malafi^",
     "ab": "Malacafay kita a malafi^. Nga’ay to haw?",
     "ch": "我們一起吃晚餐好嗎？",
-    "fs": false
+    "fs": false,
+    "keyPath": "./sound/1/Pkey_1.mp3",
+    "abPath": "./sound/1/P_1.mp3"
   },
   {
     "n": 2,
@@ -15,7 +17,9 @@
     "keyw": "malahok",
     "ab": "Malacafay kita a malahok. Nga’ay to haw?",
     "ch": "我們一起吃午餐好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_2.mp3",
+    "abPath": "./sound/1/P_2.mp3"
   },
   {
     "n": 3,
@@ -24,7 +28,9 @@
     "keyw": "maranam",
     "ab": "Malacafay kita a maranam. Nga’ay to haw?",
     "ch": "我們一起吃早餐好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_3.mp3",
+    "abPath": "./sound/1/P_3.mp3"
   },
   {
     "n": 4,
@@ -33,7 +39,9 @@
     "keyw": "midangoy",
     "ab": "Malacafay kita a midangoy. Nga’ay to haw?",
     "ch": "我們一起去游泳好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_4.mp3",
+    "abPath": "./sound/1/P_4.mp3"
   },
   {
     "n": 5,
@@ -42,7 +50,9 @@
     "keyw": "patiked",
     "ab": "Malacafay kita a patiked. Nga’ay to haw?",
     "ch": "我們一起去釣魚好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_5.mp3",
+    "abPath": "./sound/1/P_5.mp3"
   },
   {
     "n": 6,
@@ -51,7 +61,9 @@
     "keyw": "masakero^",
     "ab": "Malacafay kita a masakero^. Nga’ay to haw?",
     "ch": "我們一起去跳舞好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_6.mp3",
+    "abPath": "./sound/1/P_6.mp3"
   },
   {
     "n": 7,
@@ -60,7 +72,9 @@
     "keyw": "romadiw",
     "ab": "Malacafay kita a romadiw. Nga’ay to haw?",
     "ch": "我們一起去唱歌好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_7.mp3",
+    "abPath": "./sound/1/P_7.mp3"
   },
   {
     "n": 8,
@@ -69,7 +83,9 @@
     "keyw": "mirenaf",
     "ab": "Malacafay kita a mirenaf. Nga’ay to haw?",
     "ch": "我們一起去畫圖好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_8.mp3",
+    "abPath": "./sound/1/P_8.mp3"
   },
   {
     "n": 9,
@@ -78,7 +94,9 @@
     "keyw": "miradom",
     "ab": "Malacafay kita a miradom. Nga’ay to haw?",
     "ch": "我們一起去挑水好嗎？",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_9.mp3",
+    "abPath": "./sound/1/P_9.mp3"
   },
   {
     "n": 10,
@@ -87,21 +105,25 @@
     "keyw": "mi’adop",
     "ab": "Malacafay kita a mi’adop. Nga’ay to haw?",
     "ch": "我們一起去狩獵好嗎?",
-    "fs": null
-  },
-  {
-    "n": 10,
-    "tn": 1,
-    "qn": 10,
-    "keyw": "midateng",
-    "ab": "Malacafay kita a midateng. Nga’ay to haw?",
-    "ch": "我們一起去採野菜好嗎?",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_10.mp3",
+    "abPath": "./sound/1/P_10.mp3"
   },
   {
     "n": 11,
     "tn": 1,
     "qn": 11,
+    "keyw": "midateng",
+    "ab": "Malacafay kita a midateng. Nga’ay to haw?",
+    "ch": "我們一起去採野菜好嗎?",
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_11.mp3",
+    "abPath": "./sound/1/P_11.mp3"
+  },
+  {
+    "n": 12,
+    "tn": 1,
+    "qn": 12,
     "keyw": "mikasoy i lotok",
     "ab": "Malacafay kita a mikasoy i lotok. Nga’ay to haw?",
     "ch": "我們一起去山上砍柴好嗎?",

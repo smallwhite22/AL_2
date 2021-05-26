@@ -20,6 +20,9 @@ let audio = new Audio(audioPath);
 //該類型前的資料數量，需經過qType和countQn()計算
 let directQ = 0;
 
+//錯誤次數
+let wrongTime = 0;
+
 //聽寫練習題號
 let audioQ = 0;
 
@@ -125,7 +128,9 @@ class Post extends Component {
     this.s3in2Tos4 = this.s3in2Tos4.bind(this);
     this.s3audio = this.s3audio.bind(this);
     this.sendAudioAnswer = this.sendAudioAnswer.bind(this);
-
+    this.nextAudioQuestion = this.nextAudioQuestion.bind(this);
+    this.s3in2re = this.s3in2re.bind(this);
+    this.sendAudioEnter = this.sendAudioEnter.bind(this);
     // 這一行有點難解釋，想深入研究的麻煩自己查資料
     //
     this.state = {
@@ -137,6 +142,7 @@ class Post extends Component {
       audioRole: AudioData[audioNo].role,
       s3start: false,
       s3in2start: false,
+      s3in2Complete: false,
       s4start: false,
       s4ex: false,
       s4an: false,
@@ -161,6 +167,8 @@ class Post extends Component {
           ab: '',
           keyw: '',
           correct: '',
+          keyPath:'',
+          abPath:''
         },
       ],
       s3in2List: [
@@ -175,41 +183,97 @@ class Post extends Component {
     };
   }
 
+  s3in2re() {
+    window.location.reload();
+    this.state({
+      s1start: false,
+      s3in2start: true,
+    });
+  }
+
   sendAnswer(idx, array) {
-    console.log('cQ: ', cQ);
-    if (this.state.value == this.state.answer && cQ < maxNr) {
+    let NewValue = this.state.value.replace("'", '’');
+    if (NewValue == this.state.answer && cQ < maxNr) {
       this.rightFunc(array, () => this.rightFunc2(idx));
     } else if (this.state.value != this.state.answer) {
       this.wrongFunc(array, () => this.wrongFunc2(idx));
     }
   }
   sendAudioAnswer(idx, array) {
-    if (this.state.value == this.state.audioAnswer) {
+    let NewValue = this.state.value.replace("'", '’');
+    if (NewValue == this.state.audioAnswer) {
       this.rightAFunc(array, () => this.rightAFunc2(idx));
     } else {
-      // this.wrongAFunc(array, () => this.wrongAFunc2(idx));
+      this.wrongAFunc(array, () => this.wrongAFunc2(idx));
     }
   }
 
-  rightAFunc(arrary, callback) {
+  wrongAFunc(array, callback) {
     this.setState(
       {
-        audioPath: './sound/right.mp3',
-        s3in2List: [
-          {
-            n: AudioData[audioQ].n,
-            path: AudioData[audioQ].path,
-            role: AudioData[audioQ].role,
-            correct: true,
-            picPath: './images/pic-right.png',
-          },
-        ],
+        audioPath: './sound/wrong.mp3',
       },
       callback
     );
   }
 
+  wrongAFunc2(idx) {
+    let audio = new Audio(this.state.audioPath);
+    audio.play();
+  }
+  nextAudioQuestion() {
+    this.setState({
+      s4correct: false,
+      audioAnswer: AudioData[audioQ].ab,
+      audioQrole: AudioData[audioQ].role,
+      audioQuestion: AudioData[audioQ].path,
+      value: '',
+    });
+  }
+
+  rightAFunc(array, callback) {
+    if (audioQ < AudioData.length - 1) {
+      this.setState(
+        {
+          audioPath: './sound/right.mp3',
+          s4correct: true,
+          s3in2List: [
+            ...this.state.s3in2List,
+            {
+              n: AudioData[audioQ].n + '.',
+              path: AudioData[audioQ].path,
+              role: AudioData[audioQ].role,
+              correct: true,
+              picPath: './images/pic-right.png',
+            },
+          ],
+        },
+        callback
+      );
+    } else {
+      this.setState(
+        {
+          s3in2Complete: true,
+          audioPath: './sound/right.mp3',
+          s4correct: true,
+          s3in2List: [
+            ...this.state.s3in2List,
+            {
+              n: AudioData[audioQ].n + '.',
+              path: AudioData[audioQ].path,
+              role: AudioData[audioQ].role,
+              correct: true,
+              picPath: './images/pic-right.png',
+            },
+          ],
+        },
+        callback
+      );
+    }
+  }
+
   rightAFunc2(idx) {
+    audioQ = audioQ + 1;
     audio.pause();
     audioPath = this.state.audioPath;
     audio = new Audio(audioPath);
@@ -333,6 +397,12 @@ class Post extends Component {
   sendEnter = (event) => {
     if (event.key === 'Enter') {
       this.sendAnswer();
+    }
+  };
+
+  sendAudioEnter = (event) => {
+    if (event.key === 'Enter') {
+      this.sendAudioAnswer();
     }
   };
 
@@ -611,7 +681,7 @@ class Post extends Component {
           </div>
         )}
         {/* 第四階段：聽打練習*/}
-        {!this.state.s3in2start && (
+        {this.state.s3in2start && (
           <div className={'s3in2Box'}>
             <div>聽寫練習</div>
             <div>說明：點擊頭像聽老師談話的內容並寫出完整句子</div>
@@ -620,6 +690,7 @@ class Post extends Component {
                 {this.state.s3in2List.map((s3in2) => (
                   <li key={s3in2.n}>
                     <div>
+                      {s3in2.n}
                       <button value={s3in2.path} onClick={this.s3audio}>
                         {s3in2.role == 1 && <img src={'./images/woman.png'} />}
                         {s3in2.role == 2 && <img src={'./images/man.png'} />}
@@ -630,46 +701,63 @@ class Post extends Component {
                 ))}
               </ul>
               <div>
-                <div className={'s3qBox'}>
-                  <div>{audioQ + 1}.題目：</div>
+                {!this.state.s4correct && (
                   <div>
-                    <button
-                      value={this.state.audioQuestion}
-                      onClick={this.s3audio}>
-                      {this.state.audioQrole == 1 && (
-                        <img src={'./images/woman.png'} />
-                      )}
-                      {this.state.audioQrole == 2 && (
-                        <img src={'./images/man.png'} />
-                      )}
+                    <div className={'s3qBox'}>
+                      <div>{audioQ + 1}.題目：</div>
+                      <div>
+                        <button
+                          value={this.state.audioQuestion}
+                          onClick={this.s3audio}>
+                          {this.state.audioQrole == 1 && (
+                            <img src={'./images/woman.png'} />
+                          )}
+                          {this.state.audioQrole == 2 && (
+                            <img src={'./images/man.png'} />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      輸入答案：
+                      <input
+                        type='text'
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        onPaste={this.handleCopy}
+                        onKeyPress={this.sendAudioEnter}
+                        className={'input'}
+                      />
+                      <button
+                        onClick={this.sendAudioAnswer}
+                        className={'s4Btn_send'}>
+                        送出答案
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {this.state.s4correct && !this.state.s3in2Complete && (
+                  <div className={'s4NextQu'}>
+                    <button onClick={this.nextAudioQuestion}>
+                      {this.state.btnCon}
                     </button>
                   </div>
-                </div>
-                <div>
-                  輸入答案：
-                  <input
-                    type='text'
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                    onPaste={this.handleCopy}
-                    onKeyPress={this.sendEnter}
-                    className={'input'}
-                  />
-                  <button
-                    onClick={this.sendAudioAnswer}
-                    className={'s4Btn_send'}>
-                    送出答案
-                  </button>
-                </div>
+                )}
               </div>
             </div>
-            <div>
-              <button onClick={this.s3in2Tos4}>下一階段</button>
-            </div>
+            {this.state.s3in2Complete && (
+              <div>
+                <div>全部答對囉！可再練習一次或者繼續下一個階段</div>
+                <div>
+                  <button onClick={this.s3in2re}>再練習一次</button>
+                  <button onClick={this.s3in2Tos4}>下一階段</button>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {/* 第五階段：打字練習*/}
-        {this.state.s4start && (
+        {!this.state.s4start && (
           <div className={'s4Box'}>
             <div className={'s4Title'}>聽說教學法練習</div>
 
@@ -716,9 +804,14 @@ class Post extends Component {
                             {this.state.s4showList && (
                               <div>
                                 <div>
-                                  {todo.id}.題目:{todo.keyw}
+                                  {todo.id}.題目:<div className={'color-red'}>{todo.keyw}</div>
                                 </div>
-                                <div>答案:{todo.ab}</div>
+                                <div>答案: <Highlighter
+                        highlightClassName='color-red'
+                        searchWords={[todo.keyw]}
+                        autoEscape={true}
+                        textToHighlight={todo.ab}
+                      /></div>
                               </div>
                             )}
                           </li>
