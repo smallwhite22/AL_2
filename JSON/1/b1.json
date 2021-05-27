@@ -127,6 +127,8 @@
     "keyw": "mikasoy i lotok",
     "ab": "Malacafay kita a mikasoy i lotok. Nga’ay to haw?",
     "ch": "我們一起去山上砍柴好嗎?",
-    "fs": null
+    "fs": null,
+    "keyPath": "./sound/1/Pkey_12.mp3",
+    "abPath": "./sound/1/P_12.mp3"
   }
 ]

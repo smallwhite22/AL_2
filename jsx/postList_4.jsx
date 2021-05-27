@@ -6,6 +6,7 @@ import Highlighter from 'react-highlight-words';
 let postPath = 1;
 const PostData = require('../JSON/1/b' + postPath + '.json');
 const AudioData = require('../JSON/1/audio_b' + postPath + '.json');
+const IntroData = require('../JSON/1/instructions_b' + postPath + '.json');
 //題型編號
 let qType = 1;
 //不重覆亂數的容器
@@ -43,6 +44,13 @@ console.log('題型類型總共有:' + qAllType);
 let maxNr = PostData.filter((PostData) => PostData.tn == qType).length;
 
 let newEx = qAllTypeDic[qType];
+
+// window.onload = function () {
+//   audio.pause();
+//   audioPath = IntroData[0].path;
+//   audio = new Audio(audioPath);
+//   audio.play();
+// };
 
 function QuestionNumber() {
   maxNr = PostData.filter((PostData) => PostData.qc == qType).length;
@@ -106,16 +114,66 @@ class RecordVoice extends Component {
     );
   }
 }
+
+class S4Audio extends Component {
+  constructor(props) {
+    super(props);
+    this.s4AudioFunc = this.s4AudioFunc.bind(this);
+    this.state = {
+      //s4AudioGoing: false,
+    };
+  }
+
+  s4AudioFunc = (ev) => {
+    if (!this.state.s4AudioGoing) {
+      this.setState({
+        //s4AudioGoing: true,
+      });
+      audio.pause();
+      audioPath = ev.currentTarget.value;
+      audio = new Audio(audioPath);
+      audio.play();
+      audio.onended = () => {
+        this.setState({
+          // s4AudioGoing: false,
+        });
+      };
+    } else {
+      audio.pause();
+      this.setState({
+        //s4AudioGoing: false,
+      });
+    }
+  };
+
+  render() {
+    return (
+      <button
+        value={this.props.pathName}
+        onClick={this.s4AudioFunc}
+        className={
+          this.state.s4AudioGoing ? 'audioStop' : 'audioFunc'
+        }></button>
+    );
+  }
+}
+
 class Post extends Component {
   // 建構子，每個 class 第一次產生時都會執行到這邊
   constructor(props) {
     super(props);
     this.s1chBtn = this.s1chBtn.bind(this);
     this.s1abBtn = this.s1abBtn.bind(this);
+    this.s0Tos1 = this.s0Tos1.bind(this);
+    this.s1Audio = this.s1Audio.bind(this);
     this.s1Tos2 = this.s1Tos2.bind(this);
-    this.s2Tos3 = this.s2Tos3.bind(this);
+    this.s2Tos3Intro = this.s2Tos3Intro.bind(this);
+    this.s3IntroTos3 = this.s3IntroTos3.bind(this);
+    this.s4IntroTos4 = this.s4IntroTos4.bind(this);
     this.s3Tos4 = this.s3Tos4.bind(this);
     this.s3Tos3in2 = this.s3Tos3in2.bind(this);
+    this.s3IntroAudio = this.s3IntroAudio.bind(this);
+    this.s4IntroAudio = this.s4IntroAudio.bind(this);
     this.showAnswer = this.showAnswer.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCopy = this.handleCopy.bind(this);
@@ -127,28 +185,36 @@ class Post extends Component {
     this.audioControl = this.audioControl.bind(this);
     this.s3in2Tos4 = this.s3in2Tos4.bind(this);
     this.s3audio = this.s3audio.bind(this);
+    this.s4audio = this.s4audio.bind(this);
     this.sendAudioAnswer = this.sendAudioAnswer.bind(this);
     this.nextAudioQuestion = this.nextAudioQuestion.bind(this);
     this.s3in2re = this.s3in2re.bind(this);
+    this.s5IntroAudio = this.s5IntroAudio.bind(this);
     this.sendAudioEnter = this.sendAudioEnter.bind(this);
+    this.s3Tos4intro = this.s3Tos4intro.bind(this);
+    this.s5IntroTos4 = this.s5IntroTos4.bind(this);
     // 這一行有點難解釋，想深入研究的麻煩自己查資料
     //
     this.state = {
-      s1start: true,
+      s0start: true,
+      s1start: false,
       s1ch: false,
       s1ab: false,
       s2start: false,
       s2s: true,
+      s3intro: false,
       audioRole: AudioData[audioNo].role,
       s3start: false,
       s3in2start: false,
       s3in2Complete: false,
+      s4intro: false,
       s4start: false,
       s4ex: false,
       s4an: false,
       s4qn: false,
       s4correct: false,
       s4showList: false,
+      s5intro: false,
       audioGoing: true,
       value: '',
       searchText: PostData[0].keyw,
@@ -156,20 +222,23 @@ class Post extends Component {
       //audioPath: AudioData[audioNo].path,
       resultPicPath: '',
       question: PostData[quNum].keyw,
+      questionAudio: PostData[quNum].keyPath,
       answer: PostData[quNum].ab,
+      answerAudio: PostData[quNum].abPath,
       audioQuestion: AudioData[audioQ].path,
       audioQrole: AudioData[audioQ].role,
       audioAnswer: AudioData[audioQ].ab,
+      btnCon2: '暫停',
       btnCon: '下一題',
       todos: [
-        {
-          id: '',
-          ab: '',
-          keyw: '',
-          correct: '',
-          keyPath:'',
-          abPath:''
-        },
+        // {
+        //   id: '',
+        //   ab: '',
+        //   keyw: '',
+        //   correct: '',
+        //   keyPath: '',
+        //   abPath: '',
+        // },
       ],
       s3in2List: [
         {
@@ -178,16 +247,77 @@ class Post extends Component {
           role: '',
           correct: null,
           picPath: '',
+          ab: '',
         },
       ],
     };
   }
 
-  s3in2re() {
-    window.location.reload();
-    this.state({
-      s1start: false,
+  s1Audio() {
+    audio.pause();
+    audioPath = IntroData[0].path;
+    audio = new Audio(audioPath);
+    audio.play();
+  }
+
+  s3IntroTos3() {
+    audio.pause();
+    this.setState({
+      s3intro: false,
+      s3start: true,
+      s1ab: false,
+      s1ch: false,
+    });
+  }
+
+  s4IntroTos4() {
+    audio.pause();
+    this.setState({
+      s4intro: false,
       s3in2start: true,
+      s1ab: false,
+      s1ch: false,
+    });
+  }
+
+  s5IntroTos4() {
+    audio.pause();
+    this.setState({
+      s5intro: false,
+      s4start: true,
+      s1ab: false,
+      s1ch: false,
+    });
+  }
+
+  s3IntroAudio() {
+    audio.pause();
+    audioPath = IntroData[2].path;
+    audio = new Audio(audioPath);
+    audio.play();
+  }
+
+  s4IntroAudio() {
+    audio.pause();
+    audioPath = IntroData[3].path;
+    audio = new Audio(audioPath);
+    audio.play();
+  }
+
+  s5IntroAudio() {
+    audio.pause();
+    audioPath = IntroData[4].path;
+    audio = new Audio(audioPath);
+    audio.play();
+  }
+
+  s3in2re() {
+    audioQ = 0;
+    this.setState({
+      s3in2List: [],
+      audioQuestion: AudioData[audioQ].path,
+      audioQrole: AudioData[audioQ].role,
+      audioAnswer: AudioData[audioQ].ab,
     });
   }
 
@@ -243,6 +373,7 @@ class Post extends Component {
               n: AudioData[audioQ].n + '.',
               path: AudioData[audioQ].path,
               role: AudioData[audioQ].role,
+              ab: AudioData[audioQ].ab,
               correct: true,
               picPath: './images/pic-right.png',
             },
@@ -262,6 +393,7 @@ class Post extends Component {
               n: AudioData[audioQ].n + '.',
               path: AudioData[audioQ].path,
               role: AudioData[audioQ].role,
+              ab: AudioData[audioQ].ab,
               correct: true,
               picPath: './images/pic-right.png',
             },
@@ -292,7 +424,9 @@ class Post extends Component {
             {
               id: cQ,
               ab: PostData[quNum].ab,
+              abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
+              keyPath: PostData[quNum].keyPath,
             },
           ],
         },
@@ -310,7 +444,9 @@ class Post extends Component {
             {
               id: cQ,
               ab: PostData[quNum].ab,
+              abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
+              keyPath: PostData[quNum].keyPath,
             },
           ],
         },
@@ -329,7 +465,9 @@ class Post extends Component {
             {
               id: cQ,
               ab: PostData[quNum].ab,
+              abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
+              keyPath: PostData[quNum].keyPath,
             },
           ],
         },
@@ -386,13 +524,16 @@ class Post extends Component {
         s4correct: '',
         question: PostData[quNum].keyw,
         answer: PostData[quNum].ab,
+        questionAudio: PostData[quNum].keyPath,
         value: '',
       },
       callback
     );
   }
 
-  next2(idx) {}
+  next2(idx) {
+    console.log(this.state.questionAudio);
+  }
 
   sendEnter = (event) => {
     if (event.key === 'Enter') {
@@ -420,10 +561,26 @@ class Post extends Component {
     }));
   }
 
+  s0Tos1() {
+    audio.pause();
+    audioPath = IntroData[0].path;
+    audio = new Audio(audioPath);
+    audio.play();
+    this.setState({
+      s0start: false,
+      s1start: true,
+    });
+
+    //this.s2Audio1(array, () => this.s2Audio2(idx));
+  }
+
   s1Tos2() {
+    audio.pause();
     this.setState({
       s1start: false,
       s2start: true,
+      s1ab: false,
+      s1ch: false,
     });
 
     this.s2Audio1();
@@ -455,28 +612,64 @@ class Post extends Component {
     audio.play();
   };
 
+  s4audio = (ev) => {
+    if (this.state.audioGoing) {
+      audio.pause();
+      audioPath = ev.currentTarget.value;
+      audio = new Audio(audioPath);
+      audio.play();
+      this.setState({
+        audioGoing: false,
+      });
+      audio.onended = () => {
+        this.setState({
+          audioGoing: true,
+        });
+      };
+    } else {
+      audio.pause();
+      this.setState({
+        audioGoing: true,
+      });
+    }
+  };
+
   audioControl() {
     if (this.state.audioGoing) {
       audio.pause();
       this.setState({
         audioGoing: false,
+        btnCon2: '播放',
       });
     } else {
       audio.play();
       this.setState({
         audioGoing: true,
+        btnCon2: '暫停',
       });
     }
   }
 
-  s2Tos3() {
+  s2Tos3Intro() {
     this.setState({
       s2start: false,
-      s3start: true,
+      s3intro: true,
     });
     audio.pause();
+    audioPath = IntroData[2].path;
+    audio = new Audio(audioPath);
+    audio.play();
   }
-
+  s3Tos4intro() {
+    this.setState({
+      s3start: false,
+      s4intro: true,
+    });
+    audio.pause();
+    audioPath = IntroData[3].path;
+    audio = new Audio(audioPath);
+    audio.play();
+  }
   s3Tos4() {
     this.setState({
       s3start: false,
@@ -492,10 +685,15 @@ class Post extends Component {
   }
 
   s3in2Tos4() {
+    audio.pause();
     this.setState({
-      s4start: true,
+      s5intro: true,
       s3in2start: false,
+      audioGoing: false,
     });
+    audioPath = IntroData[4].path;
+    audio = new Audio(audioPath);
+    audio.play();
   }
 
   showAnswer() {
@@ -524,12 +722,26 @@ class Post extends Component {
 
   render() {
     let todos = this.state.todos;
+
+    const test = <button value={''}>7777</button>;
+
     return (
       <div>
+        {/* 第0階段：開始前 */}
+        {this.state.s0start && (
+          <div className={'s0Box'}>
+            <button onClick={this.s0Tos1}>進入聽說直接教學法</button>
+          </div>
+        )}
         {/* 第一階段：說明 */}
-        {!this.state.s1start && (
+        {this.state.s1start && (
           <div className={'s1Box'}>
-            <div>聽說直接教學法（說明有語音）</div>
+            <div>
+              聽說直接教學法
+              <br />
+              第一階段說明
+            </div>
+
             <div className={'s1BtnBox'}>
               <div>
                 <button onClick={this.s1chBtn}>
@@ -541,16 +753,19 @@ class Post extends Component {
               </div>
             </div>
 
-            {this.state.s1ch && <div className={'s1Text'}>我是中文</div>}
-            {this.state.s1ab && <div className={'s1Text'}>我是族語</div>}
-
+            {this.state.s1ab && (
+              <div className={'s1Text'}>{IntroData[0].ab}</div>
+            )}
+            {this.state.s1ch && (
+              <div className={'s1Text'}>{IntroData[0].ch}</div>
+            )}
             <div>
-              <button>再聽一次說明</button>
+              <button onClick={this.s1Audio}>再聽一次說明</button>
               <button onClick={this.s1Tos2}>開始聽說教學</button>
             </div>
           </div>
         )}
-        {/* 第二階段：對話沒有文字 */}
+        {/* 第一階段：對話沒有文字 */}
         {this.state.s2start && (
           <div className={'s2Box'}>
             <div className={'s2ppl'}>
@@ -569,13 +784,45 @@ class Post extends Component {
                 <img src={'./images/speaker.png'} />
               </div>
             </div>
-            <div>
-              <button onClick={this.audioControl}>暫停</button>
-              <button onClick={this.s2Tos3}>下一階段</button>
+            <div className={'s2BtnBox'}>
+              <button onClick={this.audioControl}>{this.state.btnCon2}</button>
+              <button onClick={this.s2Tos3Intro}>下一階段</button>
             </div>
           </div>
         )}
-        {/* 第三階段：自己錄音自己聽*/}
+        {/* 第二階段說明*/}
+        {this.state.s3intro && (
+          <div className={'s1Box'}>
+            <div>
+              聽說直接教學法
+              <br />
+              第二階段說明
+            </div>
+
+            <div className={'s1BtnBox'}>
+              <div>
+                <button onClick={this.s1chBtn}>
+                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
+                </button>
+                <button onClick={this.s1abBtn}>
+                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
+                </button>
+              </div>
+            </div>
+
+            {this.state.s1ab && (
+              <div className={'s1Text'}>{IntroData[2].ab}</div>
+            )}
+            {this.state.s1ch && (
+              <div className={'s1Text'}>{IntroData[2].ch}</div>
+            )}
+            <div>
+              <button onClick={this.s3IntroAudio}>再聽一次說明</button>
+              <button onClick={this.s3IntroTos3}>開始第二階段</button>
+            </div>
+          </div>
+        )}
+        {/* 第二階段：自己錄音自己聽*/}
         {this.state.s3start && (
           <div className={'s3Box'}>
             <ul>
@@ -676,15 +923,50 @@ class Post extends Component {
               </li>
             </ul>
             <div>
-              <button onClick={this.s3Tos3in2}>下一階段</button>
+              <button onClick={this.s3Tos4intro}>下一階段</button>
             </div>
           </div>
         )}
-        {/* 第四階段：聽打練習*/}
+        {/* 第三階段：說明*/}
+        {this.state.s4intro && (
+          <div className={'s1Box'}>
+            <div>
+              聽說直接教學法
+              <br />
+              第三階段說明
+            </div>
+
+            <div className={'s1BtnBox'}>
+              <div>
+                <button onClick={this.s1chBtn}>
+                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
+                </button>
+                <button onClick={this.s1abBtn}>
+                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
+                </button>
+              </div>
+            </div>
+
+            {this.state.s1ab && (
+              <div className={'s1Text'}>{IntroData[3].ab}</div>
+            )}
+            {this.state.s1ch && (
+              <div className={'s1Text'}>{IntroData[3].ch}</div>
+            )}
+            <div>
+              <button onClick={this.s4IntroAudio}>再聽一次說明</button>
+              <button onClick={this.s4IntroTos4}>開始第三階段</button>
+            </div>
+          </div>
+        )}
+        {/* 第三階段：聽打練習*/}
         {this.state.s3in2start && (
           <div className={'s3in2Box'}>
-            <div>聽寫練習</div>
-            <div>說明：點擊頭像聽老師談話的內容並寫出完整句子</div>
+            <div className={'s3in2Title'}>
+              <div>聽寫練習</div>
+              <div>說明：點擊頭像聽老師談話的內容並寫出完整句子</div>
+            </div>
+
             <div>
               <ul className={'s3in2List'}>
                 {this.state.s3in2List.map((s3in2) => (
@@ -696,7 +978,8 @@ class Post extends Component {
                         {s3in2.role == 2 && <img src={'./images/man.png'} />}
                       </button>
                     </div>
-                    <div>{s3in2.correct && <img src={s3in2.picPath} />}</div>
+                    <div>{s3in2.ab}</div>
+                    <div className={'s3Pic'}>{s3in2.correct && <img src={s3in2.picPath} />}</div>
                   </li>
                 ))}
               </ul>
@@ -718,7 +1001,7 @@ class Post extends Component {
                         </button>
                       </div>
                     </div>
-                    <div>
+                    <div className={'s3qInputBox'}>
                       輸入答案：
                       <input
                         type='text'
@@ -745,9 +1028,14 @@ class Post extends Component {
                 )}
               </div>
             </div>
-            {this.state.s3in2Complete && (
+            {/*測試暫時打開*/}
+            {!this.state.s3in2Complete && (
               <div>
-                <div>全部答對囉！可再練習一次或者繼續下一個階段</div>
+                <div>
+                  (測試階段暫時開啟下方兩個按鈕，方便直接進入下一個階段)
+                  <br />
+                  全部答對囉！可再練習一次或者繼續下一個階段
+                </div>
                 <div>
                   <button onClick={this.s3in2re}>再練習一次</button>
                   <button onClick={this.s3in2Tos4}>下一階段</button>
@@ -756,24 +1044,57 @@ class Post extends Component {
             )}
           </div>
         )}
-        {/* 第五階段：打字練習*/}
-        {!this.state.s4start && (
+        {/* 第四階段：說明*/}
+        {this.state.s5intro && (
+          <div className={'s1Box'}>
+            <div>
+              聽說直接教學法
+              <br />
+              第四階段說明
+            </div>
+
+            <div className={'s1BtnBox'}>
+              <div>
+                <button onClick={this.s1chBtn}>
+                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
+                </button>
+                <button onClick={this.s1abBtn}>
+                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
+                </button>
+              </div>
+            </div>
+
+            {this.state.s1ab && (
+              <div className={'s1Text'}>{IntroData[4].ab}</div>
+            )}
+            {this.state.s1ch && (
+              <div className={'s1Text'}>{IntroData[4].ch}</div>
+            )}
+            <div>
+              <button onClick={this.s5IntroAudio}>再聽一次說明</button>
+              <button onClick={this.s5IntroTos4}>開始第四階段</button>
+            </div>
+          </div>
+        )}
+        {/* 第四階段：打字練習*/}
+        {this.state.s4start && (
           <div className={'s4Box'}>
             <div className={'s4Title'}>聽說教學法練習</div>
 
             {!this.state.s4ex && (
               <div>
-                <div className={'s4rule'}>
-                  說明：依照題目的詞，參考範例在欄位中打出完整的句子
-                </div>
                 <div className={'s4ex_text'}>
-                  <div>範例題目：</div>
+                  <div>
+                    範例題目：
+                    <S4Audio pathName={PostData[0].keyPath} />
+                  </div>
                   <div>{PostData[0].keyw}</div>
                 </div>
                 {this.state.s4an && (
                   <div>
                     <div className={'s4ex_an'}>
                       範例答案：
+                      <S4Audio pathName={PostData[0].abPath} />
                       <Highlighter
                         highlightClassName='color-red'
                         searchWords={[this.state.searchText]}
@@ -803,15 +1124,22 @@ class Post extends Component {
                           <li key={todo.id}>
                             {this.state.s4showList && (
                               <div>
-                                <div>
-                                  {todo.id}.題目:<div className={'color-red'}>{todo.keyw}</div>
+                                <div className={'s4An'}>
+                                  <div className={'s4AnNo'}>{todo.id}.</div>
+                                  題目:&nbsp;
+                                  <S4Audio pathName={todo.keyPath} />
+                                  <div className={'color-red'}>{todo.keyw}</div>
                                 </div>
-                                <div>答案: <Highlighter
-                        highlightClassName='color-red'
-                        searchWords={[todo.keyw]}
-                        autoEscape={true}
-                        textToHighlight={todo.ab}
-                      /></div>
+                                <div className={'s4AnText'}>
+                                  答案:&nbsp;
+                                  <S4Audio pathName={todo.abPath} />
+                                  <Highlighter
+                                    highlightClassName='color-red'
+                                    searchWords={[todo.keyw]}
+                                    autoEscape={true}
+                                    textToHighlight={todo.ab}
+                                  />
+                                </div>
                               </div>
                             )}
                           </li>
@@ -822,7 +1150,9 @@ class Post extends Component {
                       {!this.state.s4correct && (
                         <div className={'s4_answerArea'}>
                           <div className={'s4_qu'}>
-                            {cQ}.題目:{this.state.question}
+                            {cQ}.題目:&nbsp;
+                            <S4Audio pathName={this.state.questionAudio} />
+                            {this.state.question}
                           </div>
                           輸入答案：
                           <input

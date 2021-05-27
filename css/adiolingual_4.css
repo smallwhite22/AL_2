@@ -54,6 +54,11 @@ button {
   font-size: 24px;
 }
 
+.s0Box {
+  text-align: center;
+  margin-top: 100px;
+}
+
 .s1Box {
   text-align: center;
   padding-top: 30px;
@@ -63,17 +68,26 @@ button {
   margin: 0px 10px;
 }
 
+.s1Box:first-child {
+  line-height: 30px;
+}
+
 .s1BtnBox {
   margin: 20px 0px;
 }
 
 .s1Text {
-  margin-bottom: 20px;
+  margin: 0 30px 20px 30px;
+  text-align: left;
 }
 
 .s2Box {
   text-align: center;
   margin-top: 50px;
+}
+
+.s2BtnBox button {
+  margin: 10px;
 }
 
 .s2pic {
@@ -110,6 +124,20 @@ button {
   top: 15px;
 }
 
+.s3Pic {
+  margin-left: 15px;
+}
+
+.s3in2Title {
+  font-size: 36px;
+  line-height: 48px;
+  margin: 30px 0;
+}
+
+.s3in2Title div:nth-child(2) {
+  font-size: 24px;
+}
+
 .s3Btn1 {
   background: transparent;
   border: none;
@@ -128,6 +156,21 @@ button {
   margin-bottom: 20px;
 }
 
+.s3qBox {
+  margin-top: 30px;
+}
+
+.s3qBox button {
+  border: none;
+}
+
+.s3qInputBox {
+  background-color: #fff2be;
+  margin: 0 30px 30px 30px;
+  border: 15px;
+  padding: 15px 0;
+}
+
 .s3in2Box {
   text-align: center;
 }
@@ -136,10 +179,43 @@ button {
   width: 100px;
 }
 
+.s3in2Box input {
+  width: 600px;
+}
+
+.s3in2List {
+  text-align: left;
+  padding: 0 30px 30px 30px;
+  margin: 0 30px;
+  background-color: #ffd17b;
+  border-radius: 10px;
+}
+
+.s3in2List li {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
+}
+
+.s3in2List div {
+  display: inline;
+}
+
 .s3in2List button {
   padding: 0;
   margin: 0;
   border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.s3in2List img {
+  width: 40px;
+}
+
+.s3in2List li:first-child,
+.s3in2List li:last-child {
+  border-bottom: none;
 }
 
 .s4Box {
@@ -190,22 +266,37 @@ button {
 }
 
 .s4list {
-  padding: 15px;
   background-color: #ffd17b;
   border-radius: 15px;
   margin-bottom: 20px;
+  padding-top: 5px;
 }
 
 .s4list li {
-  margin: 15px 0;
+  margin: 0 15px;
+  padding-bottom: 23px;
+  border-bottom: 1px solid #000;
 }
 
 .s4list li div {
-  margin: 5px 0;
+  margin-top: 10px;
+}
+
+.s4list :last-child {
+  border: none;
+}
+
+.s4AnText {
+  padding-left: 22px;
 }
 
 .s4NextQu {
   text-align: center;
+  margin: 20px 0;
+}
+
+.s4AnNo {
+  padding-right: 2px;
 }
 
 .s4pic {
@@ -220,4 +311,34 @@ button {
   padding: 0;
   margin: 0;
   border: 0;
+}
+
+.audioFunc,
+.audioStop {
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  border: none;
+  margin-right: 8px;
+  padding: 0;
+  position: relative;
+  top: 8px;
+  background-color: transparent;
+}
+
+.audioFunc {
+  background-image: url("/images/play_1.png");
+}
+
+.audioStop {
+  background-image: url("/images/paused_1.png");
+}
+
+.audioFunc:hover {
+  background-image: url("/images/play_1_hover.png");
+}
+
+.s4An div {
+  display: inline;
 }
