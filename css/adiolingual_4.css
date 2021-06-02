@@ -125,13 +125,21 @@ button {
 }
 
 .s3Pic {
-  margin-left: 15px;
+  float: right;
 }
 
 .s3in2Title {
   font-size: 36px;
   line-height: 48px;
   margin: 30px 0;
+}
+
+.s3in2BtnBox {
+  text-align: center;
+}
+
+.s3in2BtnBox button {
+  margin: 0 10px;
 }
 
 .s3in2Title div:nth-child(2) {
@@ -156,6 +164,10 @@ button {
   margin-bottom: 20px;
 }
 
+.s3in1Box div {
+  display: inline;
+}
+
 .s3qBox {
   margin-top: 30px;
 }
@@ -168,7 +180,7 @@ button {
   background-color: #fff2be;
   margin: 0 30px 30px 30px;
   border: 15px;
-  padding: 15px 0;
+  padding: 30px;
 }
 
 .s3in2Box {
@@ -180,7 +192,7 @@ button {
 }
 
 .s3in2Box input {
-  width: 600px;
+  width: 500px;
 }
 
 .s3in2List {
@@ -198,7 +210,7 @@ button {
 }
 
 .s3in2List div {
-  display: inline;
+  display: inline-block;
 }
 
 .s3in2List button {
@@ -211,6 +223,18 @@ button {
 
 .s3in2List img {
   width: 40px;
+}
+
+.recordBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 80px;
+}
+
+.audio-react-recorder {
+  height: 80px;
+  visibility: hidden;
 }
 
 .s3in2List li:first-child,
@@ -266,7 +290,7 @@ button {
 }
 
 .s4list {
-  background-color: #ffd17b;
+  background-color: #fdd791;
   border-radius: 15px;
   margin-bottom: 20px;
   padding-top: 5px;
@@ -287,7 +311,15 @@ button {
 }
 
 .s4AnText {
-  padding-left: 22px;
+  padding-left: 34px;
+}
+
+.s4AnText div {
+  display: inline;
+}
+
+.s4AnText img {
+  float: right;
 }
 
 .s4NextQu {
@@ -297,6 +329,8 @@ button {
 
 .s4AnNo {
   padding-right: 2px;
+  width: 32px;
+  text-align: right;
 }
 
 .s4pic {
@@ -315,30 +349,75 @@ button {
 
 .audioFunc,
 .audioStop {
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   background-repeat: no-repeat;
-  background-size: 30px 30px;
+  background-size: 50px 50px;
   border: none;
   margin-right: 8px;
   padding: 0;
   position: relative;
-  top: 8px;
+  top: 16px;
   background-color: transparent;
 }
 
+.sound-wave {
+  height: 0;
+  width: 0;
+}
+
 .audioFunc {
-  background-image: url("/images/play_1.png");
+  background-image: url("../images/play_1.png");
 }
 
 .audioStop {
-  background-image: url("/images/paused_1.png");
+  background-image: url("../images/paused_1.png");
 }
 
 .audioFunc:hover {
-  background-image: url("/images/play_1_hover.png");
+  background-image: url("../images/play_1_hover.png");
 }
 
 .s4An div {
-  display: inline;
+  display: inline-block;
+}
+
+.s4PicBox img {
+  width: 70px;
+}
+
+.noBorder {
+  border: none;
+}
+
+.halfOpacity {
+  opacity: 0.5;
+}
+
+.redBorder {
+  border: 2px solid red;
+}
+
+.table {
+  display: table;
+  width: 100%;
+}
+
+.tableBody {
+  display: table-row-group;
+  border-collapse: collapse;
+}
+
+.tableRow {
+  display: table-row;
+}
+
+.tableCell {
+  display: table-cell;
+}
+
+.tableCell2 {
+  display: table-cell;
+  background-color: violet;
+  height: 100%;
 }

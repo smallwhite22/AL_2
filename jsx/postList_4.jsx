@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 //import PostData from '../JSON/1/a1.json';
 import Highlighter from 'react-highlight-words';
+//import ReactRecord from 'react-record';
+import AudioReactRecorder, {RecordState} from 'audio-react-recorder'; //B
+import {ReactMic} from 'react-mic'; // C
+import ReactMicRecord from 'react-mic-record'; //D
 
+let context = new AudioContext();
+console.log(context);
 //JSON檔案路徑
 let postPath = 1;
 const PostData = require('../JSON/1/b' + postPath + '.json');
@@ -22,7 +28,8 @@ let audio = new Audio(audioPath);
 let directQ = 0;
 
 //錯誤次數
-let wrongTime = 0;
+let wrongTime = 1;
+let wrongTotal = 3;
 
 //聽寫練習題號
 let audioQ = 0;
@@ -88,33 +95,268 @@ function countQn() {
 
 //隨機產生的題號
 let quNum = generateUniqueRandom(maxNr) - 1;
-class RecordVoice extends Component {
+
+class RecorderD extends Component {
   constructor(props) {
     super(props);
-    this.countFun = this.countFun.bind(this);
     this.state = {
-      count: 0,
+      record: false,
+      path: null,
     };
   }
 
-  countFun() {
+  startRecording = () => {
     this.setState({
-      count: 6,
+      record: true,
     });
+  };
+
+  stopRecording = () => {
+    this.setState({
+      record: false,
+    });
+  };
+
+  play = () => {
+    audio.pause();
+    audio = new Audio(this.state.path);
+    audio.play();
+    console.log('path: ', this.state.path);
+  };
+
+  onData(recordedBlob) {
+    console.log('chunk of real-time data is: ', recordedBlob);
   }
+
+  onStop = (recordedBlob) => {
+    console.log('recordedBlob is: ', recordedBlob);
+    this.setState({
+      path: recordedBlob.blobURL,
+    });
+  };
 
   render() {
     return (
       <div>
-        <div>{this.state.count}</div>
-        <div>
-          <button onClick={this.countFun}>add</button>
-        </div>
+        <ReactMicRecord
+          record={this.state.record}
+          className='sound-wave'
+          onStop={this.onStop}
+          strokeColor='#000000'
+          backgroundColor='#FF4081'
+        />
+        <button
+          onClick={this.startRecording}
+          type='button'
+          className={this.state.record ? 'redBorder' : null}>
+          錄音
+        </button>
+        <button
+          onClick={this.stopRecording}
+          type='button'
+          className={!this.state.record ? 'halfOpacity' : null}>
+          停止錄音
+        </button>
+        <button
+          onClick={this.play}
+          type='button'
+          className={!this.state.path ? 'halfOpacity' : null}>
+          播放
+        </button>
+      </div>
+    );
+  }
+}
+class RecorderC extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      record: false,
+      path: '',
+    };
+  }
+
+  startRecording = () => {
+    this.setState({record: true});
+  };
+
+  stopRecording = (recordedBlob) => {
+    this.setState({
+      record: false,
+    });
+    console.log('path: ');
+  };
+
+  play = () => {
+    audio = new Audio(this.state.path);
+    audio.play();
+    console.log('path: ', this.state.path);
+  };
+
+  onData(recordedBlob) {
+    console.log('chunk of real-time data is: ', recordedBlob);
+  }
+
+  onStop = (recordedBlob) => {
+    console.log('recordedBlob is: ', recordedBlob);
+    this.setState({
+      path: recordedBlob.blobURL,
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <ReactMic
+          record={this.state.record}
+          className='sound-wave'
+          onStop={this.onStop}
+          onData={this.onData}
+          strokeColor='#000000'
+          backgroundColor='#FF4081'
+        />
+        <button onClick={this.startRecording} type='button'>
+          Start
+        </button>
+        <button onClick={this.stopRecording} type='button'>
+          Stop
+        </button>
+        <button onClick={this.play} type='button'>
+          Play
+        </button>
       </div>
     );
   }
 }
 
+class RecorderB extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      recordState: null,
+      blobURL: null,
+    };
+  }
+
+  start = () => {
+    context.resume().then(() => {
+      console.log('Playback resumed successfully');
+    });
+    this.setState({
+      recordState: RecordState.START,
+    });
+  };
+
+  stop = () => {
+    this.setState({
+      recordState: RecordState.STOP,
+    });
+  };
+
+  //audioData contains blob and blobUrl
+  onStop = (audioData) => {
+    console.log('audioData', audioData);
+    this.setState({
+      blobURL: audioData.url,
+    });
+  };
+
+  play = () => {
+    audio = new Audio(this.state.blobURL);
+    audio.play();
+    console.log('path:', this.state.blobURL);
+  };
+
+  render() {
+    const {recordState} = this.state;
+
+    return (
+      <div className={'recordBox'}>
+        <AudioReactRecorder state={recordState} onStop={this.onStop} />
+
+        <button onClick={this.start}>Start</button>
+        <button onClick={this.stop}>Stop</button>
+        <button onClick={this.play}>Play</button>
+      </div>
+    );
+  }
+}
+/*
+class RecordVoice extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      blobURL: null,
+      isRecording: false,
+    };
+  }
+
+  startRecording = () => {
+    this.setState({
+      isRecording: true,
+    });
+  };
+
+  stopRecording = () => {
+    this.setState({
+      isRecording: false,
+    });
+  };
+
+  onData = (recordedBlob) => {
+    console.log('chunk of data is: ', recordedBlob);
+  };
+
+  onSave = (blobObject) => {
+    console.log('You can tap into the onSave callback', blobObject);
+  };
+
+  onStop = (blobObject) => {
+    console.log('blobObject is: ', blobObject);
+    this.setState({
+      blobURL: blobObject.blobURL,
+    });
+  };
+
+  onStart = () => {
+    console.log('You can tap into the onStart callback');
+  };
+
+
+
+  render() {
+    const {isRecording} = this.state;
+    return (
+      <div className='record-mic'>
+        <ReactRecord
+          record={isRecording}
+          onStop={this.onStop}
+          onStart={this.onStart}
+          onSave={this.onSave}
+          onData={this.onData}>
+          <div>
+            <audio
+              ref={(c) => {
+                this.audioSource = c;
+              }}
+              controls='controls'
+              src={this.state.blobURL}>
+              <track kind='captions' />
+            </audio>
+          </div>
+          <button onClick={this.startRecording} type='button'>
+            Start
+          </button>
+          <button onClick={this.stopRecording} type='button'>
+            Stop
+          </button>
+        </ReactRecord>
+      </div>
+    );
+  }
+}
+*/
 class S4Audio extends Component {
   constructor(props) {
     super(props);
@@ -205,6 +447,7 @@ class Post extends Component {
       s3intro: false,
       audioRole: AudioData[audioNo].role,
       s3start: false,
+      s3in2qStart: false,
       s3in2start: false,
       s3in2Complete: false,
       s4intro: false,
@@ -215,6 +458,8 @@ class Post extends Component {
       s4correct: false,
       s4showList: false,
       s5intro: false,
+      s5start: false,
+      s5finish: false,
       audioGoing: true,
       value: '',
       searchText: PostData[0].keyw,
@@ -238,6 +483,7 @@ class Post extends Component {
         //   correct: '',
         //   keyPath: '',
         //   abPath: '',
+        //   picPath:'',
         // },
       ],
       s3in2List: [
@@ -287,6 +533,7 @@ class Post extends Component {
       s4start: true,
       s1ab: false,
       s1ch: false,
+      s4correct: false,
     });
   }
 
@@ -313,13 +560,40 @@ class Post extends Component {
 
   s3in2re() {
     audioQ = 0;
+    wrongTime = 1;
     this.setState({
-      s3in2List: [],
+      s3in2List: [
+        {n: '', path: '', role: '', correct: null, picPath: '', ab: ''},
+      ],
+      s4correct: false,
+      s3in2Complete: false,
+      s3in2qStart: false,
       audioQuestion: AudioData[audioQ].path,
       audioQrole: AudioData[audioQ].role,
       audioAnswer: AudioData[audioQ].ab,
     });
   }
+
+  s5re = () => {
+    cQ = 1;
+    wrongTime = 1;
+    haveIt = [];
+    this.setState({
+      s4intro: false,
+      s4start: true,
+      s4ex: false,
+      s4an: true,
+      s4qn: true,
+      s4correct: false,
+      s4showList: false,
+      s5intro: false,
+      s5start: false,
+      s5finish: false,
+      todos: [],
+      btnCon: '下一題',
+      value: '',
+    });
+  };
 
   sendAnswer(idx, array) {
     let NewValue = this.state.value.replace("'", '’');
@@ -336,22 +610,79 @@ class Post extends Component {
     } else {
       this.wrongAFunc(array, () => this.wrongAFunc2(idx));
     }
+    console.log('audioQ: ', audioQ, 'wrongTime: ', wrongTime);
   }
 
   wrongAFunc(array, callback) {
-    this.setState(
-      {
-        audioPath: './sound/wrong.mp3',
-      },
-      callback
-    );
+    if (wrongTime < wrongTotal && audioQ < AudioData.length - 1) {
+      wrongTime = wrongTime + 1;
+      this.setState(
+        {
+          audioPath: './sound/wrong.mp3',
+        },
+        callback
+      );
+    } else if (wrongTime < wrongTotal && audioQ == AudioData.length - 1) {
+      wrongTime = wrongTime + 1;
+      this.setState(
+        {
+          audioPath: './sound/wrong.mp3',
+        },
+        callback
+      );
+    } else if (wrongTime == wrongTotal && audioQ < AudioData.length - 1) {
+      this.setState(
+        {
+          audioPath: './sound/wrong.mp3',
+          s3in2qStart: true,
+          s4correct: true,
+          s3in2List: [
+            ...this.state.s3in2List,
+            {
+              n: AudioData[audioQ].n + '.',
+              path: AudioData[audioQ].path,
+              role: AudioData[audioQ].role,
+              ab: AudioData[audioQ].ab,
+              correct: true,
+              picPath: './images/pic-wrong.png',
+            },
+          ],
+        },
+        callback
+      );
+    } else if (wrongTime == wrongTotal && audioQ == AudioData.length - 1) {
+      this.setState(
+        {
+          s3in2Complete: true,
+          audioPath: './sound/wrong.mp3',
+          s3in2qStart: true,
+          s4correct: true,
+          s3in2List: [
+            ...this.state.s3in2List,
+            {
+              n: AudioData[audioQ].n + '.',
+              path: AudioData[audioQ].path,
+              role: AudioData[audioQ].role,
+              ab: AudioData[audioQ].ab,
+              correct: true,
+              picPath: './images/pic-wrong.png',
+            },
+          ],
+        },
+        callback
+      );
+    }
   }
 
   wrongAFunc2(idx) {
-    let audio = new Audio(this.state.audioPath);
+    audio.pause();
+    audioPath = this.state.audioPath;
+    audio = new Audio(audioPath);
     audio.play();
   }
   nextAudioQuestion() {
+    audioQ = audioQ + 1;
+    wrongTime = 1;
     this.setState({
       s4correct: false,
       audioAnswer: AudioData[audioQ].ab,
@@ -367,6 +698,7 @@ class Post extends Component {
         {
           audioPath: './sound/right.mp3',
           s4correct: true,
+          s3in2qStart: true,
           s3in2List: [
             ...this.state.s3in2List,
             {
@@ -387,6 +719,7 @@ class Post extends Component {
           s3in2Complete: true,
           audioPath: './sound/right.mp3',
           s4correct: true,
+          s3in2qStart: true,
           s3in2List: [
             ...this.state.s3in2List,
             {
@@ -405,7 +738,6 @@ class Post extends Component {
   }
 
   rightAFunc2(idx) {
-    audioQ = audioQ + 1;
     audio.pause();
     audioPath = this.state.audioPath;
     audio = new Audio(audioPath);
@@ -413,6 +745,7 @@ class Post extends Component {
   }
 
   rightFunc(array, callback) {
+    audio.pause();
     if (cQ == 1) {
       this.setState(
         {
@@ -420,6 +753,7 @@ class Post extends Component {
           resultPicPath: './images/pic-right.png',
           s4correct: true,
           s4showList: true,
+          s5start: true,
           todos: [
             {
               id: cQ,
@@ -427,6 +761,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              result: true,
+              picPath: './images/pic-right.png',
             },
           ],
         },
@@ -447,6 +783,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              result: true,
+              picPath: './images/pic-right.png',
             },
           ],
         },
@@ -459,6 +797,7 @@ class Post extends Component {
           resultPicPath: './images/pic-right.png',
           s4correct: true,
           s4showList: true,
+          s5finish: true,
           btnCon: '重新開始',
           todos: [
             ...this.state.todos,
@@ -468,6 +807,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              result: true,
+              picPath: './images/pic-right.png',
             },
           ],
         },
@@ -482,13 +823,65 @@ class Post extends Component {
   }
 
   wrongFunc(array, callback) {
-    this.setState(
-      {
-        audioPath: './sound/wrong.mp3',
-        resultPicPath: './images/pic-wrong.png',
-      },
-      callback
-    );
+    audio.pause();
+    if (wrongTime < wrongTotal) {
+      wrongTime = wrongTime + 1;
+      this.setState(
+        {
+          audioPath: './sound/wrong.mp3',
+          resultPicPath: './images/pic-wrong.png',
+        },
+        callback
+      );
+    } else if (wrongTime == wrongTotal && cQ < maxNr - 1) {
+      this.setState(
+        {
+          audioPath: './sound/wrong.mp3',
+          resultPicPath: './images/pic-wrong.png',
+          s4correct: true,
+          s4showList: true,
+          s5start: true,
+
+          todos: [
+            ...this.state.todos,
+            {
+              id: cQ,
+              ab: PostData[quNum].ab,
+              abPath: PostData[quNum].abPath,
+              keyw: PostData[quNum].keyw,
+              keyPath: PostData[quNum].keyPath,
+              result: true,
+              picPath: './images/pic-wrong.png',
+            },
+          ],
+        },
+        callback
+      );
+    } else if (wrongTime == wrongTotal && cQ == maxNr - 1) {
+      this.setState(
+        {
+          audioPath: './sound/wrong.mp3',
+          resultPicPath: './images/pic-wrong.png',
+          s4correct: true,
+          s4showList: true,
+          btnCon: '重新開始',
+          s5finish: true,
+          todos: [
+            ...this.state.todos,
+            {
+              id: cQ,
+              ab: PostData[quNum].ab,
+              abPath: PostData[quNum].abPath,
+              keyw: PostData[quNum].keyw,
+              keyPath: PostData[quNum].keyPath,
+              result: true,
+              picPath: './images/pic-wrong.png',
+            },
+          ],
+        },
+        callback
+      );
+    }
   }
 
   wrongFunc2(idx) {
@@ -507,6 +900,7 @@ class Post extends Component {
     //   'maxNr: ',
     //   maxNr
     // );
+    wrongTime = 1;
     if (cQ < maxNr - 1) {
       cQ = cQ + 1;
       quNum = directQ + generateUniqueRandom(maxNr) - 1;
@@ -594,6 +988,7 @@ class Post extends Component {
       audio = new Audio(audioPath);
       this.setState({
         s2s: false,
+        audioRole: AudioData[audioNo].role,
       });
       audio.play();
       audio.onended = () => {
@@ -602,8 +997,15 @@ class Post extends Component {
         console.log('audioPath: ', audioPath);
       };
     } else {
+      console.log('播放完畢');
     }
   }
+
+  s2AudioRe = () => {
+    audio.pause();
+    audioNo = 0;
+    this.s2Audio1();
+  };
 
   s3audio = (ev) => {
     audio.pause();
@@ -685,6 +1087,7 @@ class Post extends Component {
   }
 
   s3in2Tos4() {
+    wrongTime = 1;
     audio.pause();
     this.setState({
       s5intro: true,
@@ -715,8 +1118,13 @@ class Post extends Component {
   }
 
   handleCopy(e) {
-    // e.preventDefault() alert('不要複製貼上喔');
+    e.preventDefault();
+    //alert('不要複製貼上喔');
   }
+
+  reAll = () => {
+    window.location.reload();
+  };
 
   //點下提交按鈕會先執行這個
 
@@ -768,23 +1176,35 @@ class Post extends Component {
         {/* 第一階段：對話沒有文字 */}
         {this.state.s2start && (
           <div className={'s2Box'}>
+          <div className={'s4Title'}>聽說教學法 第一階段<br/></div>
             <div className={'s2ppl'}>
               <div>
-                <img src={'./images/woman.png'} />
+                <img
+                  src={'./images/woman.png'}
+                  className={this.state.audioRole == 1 ? null : 'halfOpacity'}
+                />
               </div>
               <div>
-                <img src={'./images/man.png'} />
+                <img
+                  src={'./images/man.png'}
+                  className={this.state.audioRole == 2 ? null : 'halfOpacity'}
+                />
               </div>
             </div>
             <div className={'s2pic'}>
               <div>
-                <img src={'./images/speaker.png'} />
+                {this.state.audioRole == 1 && (
+                  <img src={'./images/speaker.png'} />
+                )}
               </div>
               <div>
-                <img src={'./images/speaker.png'} />
+                {this.state.audioRole == 2 && (
+                  <img src={'./images/speaker.png'} />
+                )}
               </div>
             </div>
             <div className={'s2BtnBox'}>
+              <button onClick={this.s2AudioRe}>重新開始</button>
               <button onClick={this.audioControl}>{this.state.btnCon2}</button>
               <button onClick={this.s2Tos3Intro}>下一階段</button>
             </div>
@@ -825,102 +1245,23 @@ class Post extends Component {
         {/* 第二階段：自己錄音自己聽*/}
         {this.state.s3start && (
           <div className={'s3Box'}>
-            <ul>
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/woman.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/man.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/woman.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/man.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/woman.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/man.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'../images/woman.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/man.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/woman.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
-
-              <li>
-                <div>
-                  <button className={'s3Btn1'}>
-                    <img src={'./images/man.png'} />
-                  </button>
-                  <button>錄音</button>
-                  <button>聽錄音</button>
-                </div>
-              </li>
+          <div className={'s4Title'}>聽說教學法 第二階段<br/></div>
+            <ul className={'s3in1Box'}>
+              {AudioData.map((s3in1) => (
+                <li key={s3in1.n}>
+                  <div>
+                    {s3in1.n}.
+                    <button
+                      value={s3in1.path}
+                      onClick={this.s3audio}
+                      className={'noBorder'}>
+                      {s3in1.role == 1 && <img src={'./images/woman.png'} />}
+                      {s3in1.role == 2 && <img src={'./images/man.png'} />}
+                    </button>
+                  </div>
+                  <RecorderD />
+                </li>
+              ))}
             </ul>
             <div>
               <button onClick={this.s3Tos4intro}>下一階段</button>
@@ -963,26 +1304,32 @@ class Post extends Component {
         {this.state.s3in2start && (
           <div className={'s3in2Box'}>
             <div className={'s3in2Title'}>
-              <div>聽寫練習</div>
+              <div>聽說教學法 第三階段</div>
               <div>說明：點擊頭像聽老師談話的內容並寫出完整句子</div>
             </div>
 
             <div>
-              <ul className={'s3in2List'}>
-                {this.state.s3in2List.map((s3in2) => (
-                  <li key={s3in2.n}>
-                    <div>
-                      {s3in2.n}
-                      <button value={s3in2.path} onClick={this.s3audio}>
-                        {s3in2.role == 1 && <img src={'./images/woman.png'} />}
-                        {s3in2.role == 2 && <img src={'./images/man.png'} />}
-                      </button>
-                    </div>
-                    <div>{s3in2.ab}</div>
-                    <div className={'s3Pic'}>{s3in2.correct && <img src={s3in2.picPath} />}</div>
-                  </li>
-                ))}
-              </ul>
+              {this.state.s3in2qStart && (
+                <ul className={'s3in2List'}>
+                  {this.state.s3in2List.map((s3in2) => (
+                    <li key={s3in2.n}>
+                      <div>
+                        {s3in2.n}
+                        <button value={s3in2.path} onClick={this.s3audio}>
+                          {s3in2.role == 1 && (
+                            <img src={'./images/woman.png'} />
+                          )}
+                          {s3in2.role == 2 && <img src={'./images/man.png'} />}
+                        </button>
+                      </div>
+                      <div>{s3in2.ab}</div>
+                      <div className={'s3Pic'}>
+                        {s3in2.correct && <img src={s3in2.picPath} />}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
               <div>
                 {!this.state.s4correct && (
                   <div>
@@ -1029,14 +1376,16 @@ class Post extends Component {
               </div>
             </div>
             {/*測試暫時打開*/}
-            {!this.state.s3in2Complete && (
+            {this.state.s3in2Complete && (
               <div>
                 <div>
-                  (測試階段暫時開啟下方兩個按鈕，方便直接進入下一個階段)
+                  <br />
                   <br />
                   全部答對囉！可再練習一次或者繼續下一個階段
+                  <br />
+                  <br />
                 </div>
-                <div>
+                <div className={'s3in2BtnBox'}>
                   <button onClick={this.s3in2re}>再練習一次</button>
                   <button onClick={this.s3in2Tos4}>下一階段</button>
                 </div>
@@ -1079,7 +1428,7 @@ class Post extends Component {
         {/* 第四階段：打字練習*/}
         {this.state.s4start && (
           <div className={'s4Box'}>
-            <div className={'s4Title'}>聽說教學法練習</div>
+            <div className={'s4Title'}>聽說教學法 第四階段</div>
 
             {!this.state.s4ex && (
               <div>
@@ -1118,39 +1467,50 @@ class Post extends Component {
                 )}
                 {this.state.s4qn && (
                   <div>
-                    <ul className='s4list'>
-                      {todos.map((todo) => {
-                        return (
-                          <li key={todo.id}>
-                            {this.state.s4showList && (
-                              <div>
-                                <div className={'s4An'}>
-                                  <div className={'s4AnNo'}>{todo.id}.</div>
-                                  題目:&nbsp;
-                                  <S4Audio pathName={todo.keyPath} />
-                                  <div className={'color-red'}>{todo.keyw}</div>
+                    {this.state.s5start && (
+                      <ul className='s4list'>
+                        {todos.map((todo) => {
+                          return (
+                            <li key={todo.id}>
+                              {this.state.s4showList && (
+                                <div className={'s4AnBox'}>
+                                  <div className={'s4AnBoxIn'}>
+                                    <div className={'s4An'}>
+                                      <div className={'s4AnNo'}>{todo.id}.</div>
+                                      題目:&nbsp;
+                                      <S4Audio pathName={todo.keyPath} />
+                                      <div className={'color-red'}>
+                                        {todo.keyw}
+                                      </div>
+                                    </div>
+                                    <div className={'s4AnText'}>
+                                      答案:&nbsp;
+                                      <S4Audio pathName={todo.abPath} />
+                                      <Highlighter
+                                        highlightClassName='color-red'
+                                        searchWords={[todo.keyw]}
+                                        autoEscape={true}
+                                        textToHighlight={todo.ab}
+                                      />
+                                      <div className={'s4PicBox'}>
+                                        {todo.result && (
+                                          <img src={todo.picPath} />
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className={'s4AnText'}>
-                                  答案:&nbsp;
-                                  <S4Audio pathName={todo.abPath} />
-                                  <Highlighter
-                                    highlightClassName='color-red'
-                                    searchWords={[todo.keyw]}
-                                    autoEscape={true}
-                                    textToHighlight={todo.ab}
-                                  />
-                                </div>
-                              </div>
-                            )}
-                          </li>
-                        );
-                      })}
-                    </ul>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                     <div>
                       {!this.state.s4correct && (
                         <div className={'s4_answerArea'}>
                           <div className={'s4_qu'}>
-                            {cQ}.題目:&nbsp;
+                            {cQ}.題目:
                             <S4Audio pathName={this.state.questionAudio} />
                             {this.state.question}
                           </div>
@@ -1170,7 +1530,7 @@ class Post extends Component {
                           </button>
                         </div>
                       )}
-                      {this.state.s4correct && (
+                      {this.state.s4correct && !this.state.s5finish && (
                         <div className={'s4NextQu'}>
                           <button onClick={this.nextQuestion}>
                             {this.state.btnCon}
@@ -1178,11 +1538,18 @@ class Post extends Component {
                         </div>
                       )}
                     </div>
-                    <div className={'s4pic'}>
+
+                    {/* <div className={'s4pic'}>
                       <img src={this.state.resultPicPath} />
-                    </div>
+                    </div> */}
                   </div>
                 )}
+              </div>
+            )}
+            {this.state.s5finish && (
+              <div className={'s3in2BtnBox'}>
+                <button onClick={this.s5re}>再練習一次</button>
+                <button onClick={this.reAll}>重新開始</button>
               </div>
             )}
           </div>

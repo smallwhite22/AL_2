@@ -20,6 +20,7 @@ module.exports = {
   mode: 'development',
 
   module: {
+    
     rules: [
       {
         test: /\.jsx?$/,
@@ -32,8 +33,11 @@ module.exports = {
           },
         },
       },
+    
+
     ],
   },
+  
   // target: 'node'
 };
 
