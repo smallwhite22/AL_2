@@ -1146,8 +1146,7 @@ class Post extends Component {
           <div className={'s1Box'}>
             <div>
               聽說直接教學法
-              <br />
-              第一階段說明
+             
             </div>
 
             <div className={'s1BtnBox'}>
