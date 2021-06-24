@@ -18,6 +18,10 @@ let qType = 1;
 //不重覆亂數的容器
 let haveIt = [];
 
+let blobBox = [];
+let blobLength = AudioData.length;
+blobBox.length = blobLength;
+
 let cQ = 1;
 
 //聲音路徑設定
@@ -96,6 +100,12 @@ function countQn() {
 //隨機產生的題號
 let quNum = generateUniqueRandom(maxNr) - 1;
 
+function PlayRecordAll() {
+  audio.pause();
+  audio = new Audio(myRecord);
+  audio.play();
+}
+let myRecord = '';
 class RecorderD extends Component {
   constructor(props) {
     super(props);
@@ -122,6 +132,7 @@ class RecorderD extends Component {
     audio = new Audio(this.state.path);
     audio.play();
     console.log('path: ', this.state.path);
+    console.log(`myRecord: `, myRecord);
   };
 
   onData(recordedBlob) {
@@ -133,11 +144,12 @@ class RecorderD extends Component {
     this.setState({
       path: recordedBlob.blobURL,
     });
+    myRecord = recordedBlob.blobURL;
   };
 
   render() {
     return (
-      <div>
+      <div className={'recordBox'}>
         <ReactMicRecord
           record={this.state.record}
           className='sound-wave'
@@ -148,21 +160,17 @@ class RecorderD extends Component {
         <button
           onClick={this.startRecording}
           type='button'
-          className={this.state.record ? 'redBorder' : null}>
-          錄音
-        </button>
+          className={this.state.record ? 'btnRecording' : 'btnRecord'}></button>
         <button
           onClick={this.stopRecording}
           type='button'
-          className={!this.state.record ? 'halfOpacity' : null}>
-          停止錄音
-        </button>
+          className={
+            !this.state.record ? 'btnStopRecordNotActive' : 'btnStopRecord'
+          }></button>
         <button
           onClick={this.play}
           type='button'
-          className={!this.state.path ? 'halfOpacity' : null}>
-          播放
-        </button>
+          className={!this.state.path ? 'btnPlayNotReady' : 'btnPlay'}></button>
       </div>
     );
   }
@@ -272,7 +280,7 @@ class RecorderB extends Component {
     const {recordState} = this.state;
 
     return (
-      <div className={'recordBox'}>
+      <div>
         <AudioReactRecorder state={recordState} onStop={this.onStop} />
 
         <button onClick={this.start}>Start</button>
@@ -444,8 +452,9 @@ class Post extends Component {
       s1ab: false,
       s2start: false,
       s2s: true,
+      s2intro: false,
       s3intro: false,
-      audioRole: AudioData[audioNo].role,
+      audioRole: 0,
       s3start: false,
       s3in2qStart: false,
       s3in2start: false,
@@ -982,6 +991,18 @@ class Post extends Component {
     //this.s2Audio1(array, () => this.s2Audio2(idx));
   }
 
+  s2Intro = () => {
+    audio.pause();
+    audioPath = IntroData[1].path;
+    audio = new Audio(audioPath);
+    audio.play();
+    this.setState({
+      s2intro: true,
+      s1ab: false,
+      s1ch: false,
+    });
+  };
+
   s2Audio1() {
     if (audioNo < AudioData.length && !this.state.s3start) {
       audioPath = AudioData[audioNo].path;
@@ -1135,127 +1156,218 @@ class Post extends Component {
 
     return (
       <div>
+        <div className={'title'}>中高級教學模組</div>
         {/* 第0階段：開始前 */}
         {this.state.s0start && (
           <div className={'s0Box'}>
-            <button onClick={this.s0Tos1}>進入聽說直接教學法</button>
+            <div>
+              <button
+                onClick={this.s0Tos1}
+                className={`${'btnNo2'} ${'btnSame'}`}>
+                點我開始
+              </button>
+            </div>
           </div>
         )}
         {/* 第一階段：說明 */}
         {this.state.s1start && (
           <div className={'s1Box'}>
-            <div>
-              聽說直接教學法
-             
-            </div>
-
-            <div className={'s1BtnBox'}>
+            <div className={'alignCenter'}>
               <div>
-                <button onClick={this.s1chBtn}>
-                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
-                </button>
-                <button onClick={this.s1abBtn}>
-                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
-                </button>
+                <img src={'./images/teacher0.png'} className={'h400'} />
               </div>
             </div>
 
-            {this.state.s1ab && (
-              <div className={'s1Text'}>{IntroData[0].ab}</div>
+            {!this.state.s2intro && (
+              <div className={'s1BtnBox'}>
+                <div className={'btnBoxIn'}>
+                  <div>
+                    <button onClick={this.s1abBtn}>族</button>
+                  </div>
+
+                  {this.state.s1ab && (
+                    <div className={'s1Text'}>{IntroData[0].ab}</div>
+                  )}
+                </div>
+                <div className={'btnBoxIn'}>
+                  <div>
+                    <button onClick={this.s1chBtn}>中</button>
+                  </div>
+
+                  {this.state.s1ch && (
+                    <div className={'s1Text'}>{IntroData[0].ch}</div>
+                  )}
+                </div>
+              </div>
             )}
-            {this.state.s1ch && (
-              <div className={'s1Text'}>{IntroData[0].ch}</div>
+            {this.state.s2intro && (
+              <div className={'s1BtnBox'}>
+                <div className={'btnBoxIn'}>
+                  <div>
+                    <button onClick={this.s1abBtn}>族</button>
+                  </div>
+
+                  {this.state.s1ab && (
+                    <div className={'s1Text'}>{IntroData[1].ab}</div>
+                  )}
+                </div>
+                <div className={'btnBoxIn'}>
+                  <div>
+                    <button onClick={this.s1chBtn}>中</button>
+                  </div>
+
+                  {this.state.s1ch && (
+                    <div className={'s1Text'}>{IntroData[1].ch}</div>
+                  )}
+                </div>
+              </div>
             )}
-            <div>
-              <button onClick={this.s1Audio}>再聽一次說明</button>
-              <button onClick={this.s1Tos2}>開始聽說教學</button>
+
+            <div className={'alignCenter'}>
+              {/* <button onClick={this.s1Audio}>再聽一次說明</button> */}
+              {(this.state.s2intro && (
+                <button
+                  onClick={this.s1Tos2}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  開始
+                </button>
+              )) || (
+                <button
+                  onClick={this.s2Intro}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  繼續
+                </button>
+              )}
             </div>
           </div>
         )}
         {/* 第一階段：對話沒有文字 */}
         {this.state.s2start && (
           <div className={'s2Box'}>
-          <div className={'s4Title'}>聽說教學法 第一階段<br/></div>
+            <div className={'s4Title'}>
+              請聽對話
+              <br /><br /><br /><br /><br />
+            </div>
             <div className={'s2ppl'}>
               <div>
                 <img
-                  src={'./images/woman.png'}
-                  className={this.state.audioRole == 1 ? null : 'halfOpacity'}
+                  src={'./images/buttons/female.png'}
+                  className={'s2pplPic'}
                 />
               </div>
+
               <div>
                 <img
-                  src={'./images/man.png'}
-                  className={this.state.audioRole == 2 ? null : 'halfOpacity'}
+                  src={'./images/buttons/femaleDialog.png'}
+                  className={
+                    this.state.audioRole == 1
+                      ? 's2DialogPic'
+                      : 's2DialogPicHide'
+                  }
                 />
               </div>
-            </div>
-            <div className={'s2pic'}>
+
+              <div className={'s2BlankSpace'}></div>
+
               <div>
-                {this.state.audioRole == 1 && (
-                  <img src={'./images/speaker.png'} />
-                )}
+                <img
+                  src={'./images/buttons/maleDialog.png'}
+                  className={
+                    this.state.audioRole == 2
+                      ? 's2DialogPic'
+                      : 's2DialogPicHide'
+                  }
+                />
               </div>
+
               <div>
-                {this.state.audioRole == 2 && (
-                  <img src={'./images/speaker.png'} />
-                )}
+                <img src={'./images/buttons/male.png'} className={'s2pplPic'} />
               </div>
             </div>
+
             <div className={'s2BtnBox'}>
-              <button onClick={this.s2AudioRe}>重新開始</button>
-              <button onClick={this.audioControl}>{this.state.btnCon2}</button>
-              <button onClick={this.s2Tos3Intro}>下一階段</button>
+              <button
+                onClick={this.s2AudioRe}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                重新開始
+              </button>
+              <button
+                onClick={this.audioControl}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                {this.state.btnCon2}
+              </button>
+              <button
+                onClick={this.s2Tos3Intro}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                下一階段
+              </button>
             </div>
           </div>
         )}
         {/* 第二階段說明*/}
         {this.state.s3intro && (
           <div className={'s1Box'}>
-            <div>
-              聽說直接教學法
-              <br />
-              第二階段說明
-            </div>
-
-            <div className={'s1BtnBox'}>
+            <div className={'alignCenter'}>
+              <div className={'s4Title'}>第二階段說明</div>
               <div>
-                <button onClick={this.s1chBtn}>
-                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
-                </button>
-                <button onClick={this.s1abBtn}>
-                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
-                </button>
+                <img src={'./images/teacher0.png'} className={'h400'} />
               </div>
             </div>
 
-            {this.state.s1ab && (
-              <div className={'s1Text'}>{IntroData[2].ab}</div>
-            )}
-            {this.state.s1ch && (
-              <div className={'s1Text'}>{IntroData[2].ch}</div>
-            )}
-            <div>
-              <button onClick={this.s3IntroAudio}>再聽一次說明</button>
-              <button onClick={this.s3IntroTos3}>開始第二階段</button>
+            <div className={'s1BtnBox'}>
+              <div className={'btnBoxIn'}>
+                <div>
+                  <button onClick={this.s1abBtn}>族</button>
+                </div>
+
+                {this.state.s1ab && (
+                  <div className={'s1Text'}>{IntroData[2].ab}</div>
+                )}
+              </div>
+              <div className={'btnBoxIn'}>
+                <div>
+                  <button onClick={this.s1chBtn}>中</button>
+                </div>
+
+                {this.state.s1ch && (
+                  <div className={'s1Text'}>{IntroData[2].ch}</div>
+                )}
+              </div>
+            </div>
+
+            <div className={'alignCenter'}>
+              {/* <button onClick={this.s3IntroAudio}>再聽一次說明</button> */}
+              <button
+                onClick={this.s3IntroTos3}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                開始第二階段
+              </button>
             </div>
           </div>
         )}
         {/* 第二階段：自己錄音自己聽*/}
         {this.state.s3start && (
           <div className={'s3Box'}>
-          <div className={'s4Title'}>聽說教學法 第二階段<br/></div>
+            <div className={'s3in2Title'}>
+              <div>教學說明：</div>
+              <div>
+                點擊頭像聆聽剛剛對話裡面的句子，試著模仿並將聲音錄下來，錄完之後可點播放聆聽看看。
+              </div>
+            </div>
             <ul className={'s3in1Box'}>
               {AudioData.map((s3in1) => (
                 <li key={s3in1.n}>
                   <div>
-                    {s3in1.n}.
                     <button
                       value={s3in1.path}
                       onClick={this.s3audio}
                       className={'noBorder'}>
-                      {s3in1.role == 1 && <img src={'./images/woman.png'} />}
-                      {s3in1.role == 2 && <img src={'./images/man.png'} />}
+                      {s3in1.role == 1 && (
+                        <img src={'./images/buttons/female.png'} />
+                      )}
+                      {s3in1.role == 2 && (
+                        <img src={'./images/buttons/male.png'} />
+                      )}
                     </button>
                   </div>
                   <RecorderD />
@@ -1263,39 +1375,57 @@ class Post extends Component {
               ))}
             </ul>
             <div>
-              <button onClick={this.s3Tos4intro}>下一階段</button>
+              <button
+                onClick={() => PlayRecordAll()}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                全部播放
+              </button>
+              <button
+                onClick={this.s3Tos4intro}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                繼續
+              </button>
             </div>
           </div>
         )}
         {/* 第三階段：說明*/}
         {this.state.s4intro && (
           <div className={'s1Box'}>
-            <div>
-              聽說直接教學法
-              <br />
-              第三階段說明
-            </div>
-
-            <div className={'s1BtnBox'}>
+            <div className={'alignCenter'}>
+              <div className={'s4Title'}>第三階段說明</div>
               <div>
-                <button onClick={this.s1chBtn}>
-                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
-                </button>
-                <button onClick={this.s1abBtn}>
-                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
-                </button>
+                <img src={'./images/teacher0.png'} className={'h400'} />
               </div>
             </div>
 
-            {this.state.s1ab && (
-              <div className={'s1Text'}>{IntroData[3].ab}</div>
-            )}
-            {this.state.s1ch && (
-              <div className={'s1Text'}>{IntroData[3].ch}</div>
-            )}
-            <div>
-              <button onClick={this.s4IntroAudio}>再聽一次說明</button>
-              <button onClick={this.s4IntroTos4}>開始第三階段</button>
+            <div className={'s1BtnBox'}>
+              <div className={'btnBoxIn'}>
+                <div>
+                  <button onClick={this.s1abBtn}>族</button>
+                </div>
+
+                {this.state.s1ab && (
+                  <div className={'s1Text'}>{IntroData[3].ab}</div>
+                )}
+              </div>
+              <div className={'btnBoxIn'}>
+                <div>
+                  <button onClick={this.s1chBtn}>中</button>
+                </div>
+
+                {this.state.s1ch && (
+                  <div className={'s1Text'}>{IntroData[3].ch}</div>
+                )}
+              </div>
+            </div>
+
+            <div className={'alignCenter'}>
+              {/* <button onClick={this.s4IntroAudio}>再聽一次說明</button> */}
+              <button
+                onClick={this.s4IntroTos4}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                開始第三階段
+              </button>
             </div>
           </div>
         )}
@@ -1303,8 +1433,8 @@ class Post extends Component {
         {this.state.s3in2start && (
           <div className={'s3in2Box'}>
             <div className={'s3in2Title'}>
-              <div>聽說教學法 第三階段</div>
-              <div>說明：點擊頭像聽老師談話的內容並寫出完整句子</div>
+              <div>教學說明：</div>
+              <div>點擊頭像聽老師談話的內容並寫出完整句子</div>
             </div>
 
             <div>
@@ -1316,9 +1446,11 @@ class Post extends Component {
                         {s3in2.n}
                         <button value={s3in2.path} onClick={this.s3audio}>
                           {s3in2.role == 1 && (
-                            <img src={'./images/woman.png'} />
+                            <img src={'./images/buttons/female.png'} />
                           )}
-                          {s3in2.role == 2 && <img src={'./images/man.png'} />}
+                          {s3in2.role == 2 && (
+                            <img src={'./images/buttons/male.png'} />
+                          )}
                         </button>
                       </div>
                       <div>{s3in2.ab}</div>
@@ -1339,10 +1471,10 @@ class Post extends Component {
                           value={this.state.audioQuestion}
                           onClick={this.s3audio}>
                           {this.state.audioQrole == 1 && (
-                            <img src={'./images/woman.png'} />
+                            <img src={'./images/buttons/female.png'} />
                           )}
                           {this.state.audioQrole == 2 && (
-                            <img src={'./images/man.png'} />
+                            <img src={'./images/buttons/male.png'} />
                           )}
                         </button>
                       </div>
@@ -1359,7 +1491,7 @@ class Post extends Component {
                       />
                       <button
                         onClick={this.sendAudioAnswer}
-                        className={'s4Btn_send'}>
+                        className={`${'btnNo3'} ${'btnSame'}`}>
                         送出答案
                       </button>
                     </div>
@@ -1367,26 +1499,35 @@ class Post extends Component {
                 )}
                 {this.state.s4correct && !this.state.s3in2Complete && (
                   <div className={'s4NextQu'}>
-                    <button onClick={this.nextAudioQuestion}>
+                    <button
+                      onClick={this.nextAudioQuestion}
+                      className={`${'btnNo3'} ${'btnSame'}`}>
                       {this.state.btnCon}
                     </button>
                   </div>
                 )}
               </div>
             </div>
-            {/*測試暫時打開*/}
             {this.state.s3in2Complete && (
               <div>
                 <div>
                   <br />
                   <br />
-                  全部答對囉！可再練習一次或者繼續下一個階段
+                  恭喜你完成囉! 要再練習一次還是繼續呢?
                   <br />
                   <br />
                 </div>
                 <div className={'s3in2BtnBox'}>
-                  <button onClick={this.s3in2re}>再練習一次</button>
-                  <button onClick={this.s3in2Tos4}>下一階段</button>
+                  <button
+                    onClick={this.s3in2re}
+                    className={`${'btnNo3'} ${'btnSame'}`}>
+                    再練習一次
+                  </button>
+                  <button
+                    onClick={this.s3in2Tos4}
+                    className={`${'btnNo3'} ${'btnSame'}`}>
+                    下一階段
+                  </button>
                 </div>
               </div>
             )}
@@ -1395,39 +1536,48 @@ class Post extends Component {
         {/* 第四階段：說明*/}
         {this.state.s5intro && (
           <div className={'s1Box'}>
-            <div>
-              聽說直接教學法
-              <br />
-              第四階段說明
-            </div>
-
-            <div className={'s1BtnBox'}>
+            <div className={'alignCenter'}>
+              <div className={'s4Title'}>第四階段說明</div>
               <div>
-                <button onClick={this.s1chBtn}>
-                  {this.state.s1ch ? '隱藏中文' : '顯示中文'}
-                </button>
-                <button onClick={this.s1abBtn}>
-                  {this.state.s1ab ? '隱藏族語' : '顯示族語'}
-                </button>
+                <img src={'./images/teacher0.png'} className={'h400'} />
               </div>
             </div>
 
-            {this.state.s1ab && (
-              <div className={'s1Text'}>{IntroData[4].ab}</div>
-            )}
-            {this.state.s1ch && (
-              <div className={'s1Text'}>{IntroData[4].ch}</div>
-            )}
-            <div>
-              <button onClick={this.s5IntroAudio}>再聽一次說明</button>
-              <button onClick={this.s5IntroTos4}>開始第四階段</button>
+            <div className={'s1BtnBox'}>
+              <div className={'btnBoxIn'}>
+                <div>
+                  <button onClick={this.s1abBtn}>族</button>
+                </div>
+
+                {this.state.s1ab && (
+                  <div className={'s1Text'}>{IntroData[4].ab}</div>
+                )}
+              </div>
+              <div className={'btnBoxIn'}>
+                <div>
+                  <button onClick={this.s1chBtn}>中</button>
+                </div>
+
+                {this.state.s1ch && (
+                  <div className={'s1Text'}>{IntroData[4].ch}</div>
+                )}
+              </div>
+            </div>
+
+            <div className={'alignCenter'}>
+              {/* <button onClick={this.s5IntroAudio}>再聽一次說明</button> */}
+              <button
+                onClick={this.s5IntroTos4}
+                className={`${'btnNo3'} ${'btnSame'}`}>
+                開始第四階段
+              </button>
             </div>
           </div>
         )}
         {/* 第四階段：打字練習*/}
-        {this.state.s4start && (
+        {!this.state.s4start && (
           <div className={'s4Box'}>
-            <div className={'s4Title'}>聽說教學法 第四階段</div>
+            <div className={'s4Title'}>第四階段</div>
 
             {!this.state.s4ex && (
               <div>
@@ -1454,13 +1604,13 @@ class Post extends Component {
                 )}
                 {!this.state.s4an && (
                   <div>
-                    <button onClick={this.showAnswer}>顯示範例答案</button>
+                    <button onClick={this.showAnswer} className={`${'btnNo4'} ${'btnSame'}`}>顯示範例答案</button>
                   </div>
                 )}
                 {this.state.s4an && !this.state.s4qn && (
                   <div>
                     <div>
-                      <button onClick={this.showQn}>開始作答</button>
+                      <button onClick={this.showQn} className={`${'btnNo4'} ${'btnSame'}`}>開始作答</button>
                     </div>
                   </div>
                 )}
@@ -1505,7 +1655,7 @@ class Post extends Component {
                         })}
                       </ul>
                     )}
-                    <div>
+                    <div className={'s4_answerAreaOutBox'}>
                       {!this.state.s4correct && (
                         <div className={'s4_answerArea'}>
                           <div className={'s4_qu'}>
@@ -1524,14 +1674,14 @@ class Post extends Component {
                           />
                           <button
                             onClick={this.sendAnswer}
-                            className={'s4Btn_send'}>
+                            className={`${'btnNo5'} ${'btnSame'}`}>
                             送出答案
                           </button>
                         </div>
                       )}
                       {this.state.s4correct && !this.state.s5finish && (
                         <div className={'s4NextQu'}>
-                          <button onClick={this.nextQuestion}>
+                          <button onClick={this.nextQuestion} className={`${'btnNo3'} ${'btnSame'}`}>
                             {this.state.btnCon}
                           </button>
                         </div>
@@ -1547,8 +1697,16 @@ class Post extends Component {
             )}
             {this.state.s5finish && (
               <div className={'s3in2BtnBox'}>
-                <button onClick={this.s5re}>再練習一次</button>
-                <button onClick={this.reAll}>重新開始</button>
+                <button
+                  onClick={this.s5re}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  再練習一次
+                </button>
+                <button
+                  onClick={this.reAll}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  重新開始
+                </button>
               </div>
             )}
           </div>

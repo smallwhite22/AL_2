@@ -14,6 +14,16 @@ body {
   padding-bottom: 100px;
 }
 
+.title {
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+  background-color: #0eb3e0;
+  vertical-align: center;
+  color: white;
+  font-size: 40px;
+}
+
 .input {
   width: 500px;
   height: 40px;
@@ -43,20 +53,20 @@ body {
 }
 
 button {
-  padding: 20px 40px;
-  background-color: white;
-  font-size: 24px;
+  // padding: 20px 40px;
+  // background-color: white;
+  // font-size: 24px;
+  cursor: pointer;
 }
 .s0Box {
   text-align: center;
   margin-top: 100px;
 }
 .s1Box {
-  text-align: center;
   padding-top: 30px;
-  button {
-    margin: 0px 10px;
-  }
+  // button {
+  //   margin: 0px 10px;
+  // }
 }
 
 .s1Box:first-child {
@@ -67,20 +77,41 @@ button {
   margin: 20px 0px;
 }
 
+.btnBoxIn {
+  margin-left: 50px;
+  margin-bottom: 20px;
+  div {
+    display: inline-block;
+    vertical-align: top;
+  }
+  button {
+    border-radius: 16px;
+    height: 32px;
+    width: 32px;
+    /* border: revert; */
+    margin-bottom: 5px;
+    background-color: #3e6b66;
+    color: #fefe00;
+    font: 400 16px Arial;
+    padding: 1px 6px;
+  }
+}
+
+.buttonNo1 {
+  padding: 2px 4px;
+  box-sizing: border-box;
+  font: 400 16px Arial;
+}
+
 .s1Text {
-  margin: 0 30px 20px 30px;
-  text-align: left;
+  margin-left: 20px;
+  width: 85%;
+  line-height: 30px;
 }
 
 .s2Box {
   text-align: center;
   margin-top: 50px;
-}
-
-.s2BtnBox {
-  button {
-    margin: 10px;
-  }
 }
 
 .s2pic {
@@ -97,30 +128,26 @@ button {
 
 .s2ppl {
   div {
-    img {
-      width: 100px;
-    }
-    width: 100px;
-
-    text-align: center;
     display: inline-block;
   }
 }
 .s3Box {
-  img {
-    width: 50px;
-    position: relative;
-    top: 15px;
-  }
 }
 .s3Pic {
-float: right;
+  float: right;
+  margin-top: 18px;
 }
 
 .s3in2Title {
-  font-size: 36px;
-  line-height: 48px;
-  margin: 30px 0;
+  text-align: left;
+  margin: 30px auto;
+  padding: 0 50px;
+  display: flex;
+  line-height: 30px;
+}
+.s3in2Title div:nth-child(1) {
+  width: 160px;
+  text-align: right;
 }
 
 .s3in2BtnBox {
@@ -141,9 +168,7 @@ float: right;
 .s3Box {
   text-align: center;
   margin-top: 20px;
-  button {
-    margin-right: 5px;
-  }
+
   ul {
     margin-bottom: 20px;
   }
@@ -152,12 +177,21 @@ float: right;
   div {
     display: inline;
   }
+  li {
+    margin-bottom: 20px;
+  }
+  li:last-child {
+    margin-bottom: 50px;
+  }
+  
 }
 
 .s3qBox {
   margin-top: 30px;
   button {
     border: none;
+    background-color: transparent;
+    margin: 10px 0;
   }
 }
 .s3qInputBox {
@@ -179,42 +213,52 @@ float: right;
 
 .s3in2List {
   text-align: left;
-  padding: 0 30px 30px 30px;
+  padding: 0 30px;
   margin: 0 30px;
   background-color: rgb(255, 209, 123);
   border-radius: 10px;
-  
+
   li {
-    margin-bottom: 15px;
     border-bottom: 1px solid #000;
-    padding-bottom: 10px;
+    padding-bottom: 30px;
   }
+  li:first-child {
+    padding: 0;
+    margin: 0;
+    height: 2px;
+    border-bottom: none;
+  }
+  li:last-child {
+    border-bottom: none;
+  }
+
   div {
     display: inline-block;
   }
   button {
     padding: 0;
-    margin: 0;
+    margin: 0 5px;
     border: none;
     cursor: pointer;
     background-color: transparent;
+    position: relative;
+    top: 15px;
   }
   img {
-    width: 40px;
+    width: 50px;
   }
 }
 
 .recordBox {
-  display: flex;
-  height: 80px;
+  position: relative;
+  bottom: 11px;
+   button {
+     margin-left: 30px;
+   }
 }
 .audio-react-recorder {
   height: 80px;
   visibility: hidden;
-}
-.s3in2List li:first-child,
-.s3in2List li:last-child {
-  border-bottom: none;
 }
 
 .s4Box {
@@ -223,7 +267,7 @@ float: right;
   padding-top: 20px;
 }
 .s4Title {
-  font-size: 36px;
+  font-size: 24px;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -240,16 +284,19 @@ float: right;
   }
 }
 .s4ex_an {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+.s4_answerAreaOutBox{
+  position: relative;
+  top: 15px;
 }
 .s4_answerArea {
   background-color: rgb(255, 240, 174);
   border-radius: 15px;
-  padding: 15px;
+  padding:15px;
 }
 .s4_qu {
   margin-bottom: 15px;
- 
 }
 .s4Btn_send {
   font-size: 16px;
@@ -258,7 +305,7 @@ float: right;
 .s4list {
   background-color: rgb(253, 215, 145);
   border-radius: 15px;
-  margin-bottom: 20px;
+  margin: 20px 0;
   padding-top: 5px;
 
   li {
@@ -269,6 +316,7 @@ float: right;
       margin-top: 10px;
     }
   }
+  
 }
 
 .s4list :last-child {
@@ -334,8 +382,7 @@ float: right;
 .audioFunc:hover {
   background-image: url('../images/play_1_hover.png');
 }
-.s4An{
-
+.s4An {
 }
 .s4An div {
   display: inline-block;
@@ -345,24 +392,23 @@ float: right;
 .s4AnBoxIn {
 }
 .s4PicBox {
-  
   img {
     width: 70px;
+    position: relative;
+    bottom: 15px;
   }
 }
 
-
-
 .noBorder {
   border: none;
+  background-color: transparent;
+  img {
+    width: 80px;
+  }
 }
 
 .halfOpacity {
   opacity: 0.5;
-}
-
-.redBorder {
-  border: 2px solid red;
 }
 
 .table {
@@ -387,4 +433,173 @@ float: right;
   display: table-cell;
   background-color: violet;
   height: 100%;
+}
+
+.h400 {
+  height: 400px;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.s2BlankSpace {
+  width: 30px;
+}
+
+/*buttons*/
+$beginWidth: 1156px;
+$beginHeight: 361px;
+$beginScale: 5;
+.btnBegin {
+  background-image: url(./images/buttons/begin.png);
+  background-repeat: no-repeat;
+  border: none;
+  background-size: $beginWidth/$beginScale $beginHeight/$beginScale;
+  width: $beginWidth/$beginScale;
+  height: $beginHeight/$beginScale;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+$btnColor1: #fcd000;
+
+.btnSame {
+  background-color: $btnColor1;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.btnNo2 {
+  padding: 0 20px;
+  height: 60px;
+  font-size: 36px;
+}
+
+.btnNo3 {
+  height: 40px;
+  font-size: 24px;
+  padding: 0 20px;
+  margin: 0 15px;
+}
+
+.btnNo4 {
+  height: 40px;
+  font-size: 24px;
+  padding: 0 20px;
+  margin-top: 15px;
+}
+
+.btnNo5 {
+  height: 40px;
+  font-size: 24px;
+  padding: 0 10px;
+}
+
+$RecordWidth: 33px;
+$RecordHeight: 56px;
+$RecordScale: 1;
+
+.btnRecord,
+.btnRecording {
+  background-image: url(../images/buttons/record.png);
+  border: none;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: $RecordWidth/$RecordScale $RecordHeight/$RecordScale;
+  width: $RecordWidth/$RecordScale;
+  height: $RecordHeight/$RecordScale;
+  cursor: pointer;
+}
+
+.btnRecording {
+  background-image: url(../images/buttons/recording.png);
+}
+
+$StopRecordWidth: 67px;
+$StopRecordHeight: 57px;
+$StopRecordScale: 1;
+
+.btnStopRecord,
+.btnStopRecordNotActive {
+  background-image: url(../images/buttons/stopRecord.png);
+  border: none;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: $StopRecordWidth/$StopRecordScale
+    $StopRecordHeight/$StopRecordScale;
+  width: $StopRecordWidth/$StopRecordScale;
+  height: $StopRecordHeight/$StopRecordScale;
+  cursor: pointer;
+}
+
+.btnStopRecordNotActive {
+  opacity: 0.5;
+  cursor: auto;
+}
+
+$PlayWidth: 34px;
+$PlayHeight: 57px;
+$PlayScale: 1;
+
+.btnPlay,
+.btnPlayNotReady {
+  background-image: url(../images/buttons/playRecord.png);
+  border: none;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  position: relative;
+  background-size: $PlayWidth/$PlayScale $PlayHeight/$PlayScale;
+  width: $PlayWidth/$PlayScale;
+  height: $PlayHeight/$PlayScale;
+  cursor: pointer;
+  top: 1;
+}
+
+.btnPlayNotReady {
+  opacity: 0.5;
+  cursor: auto;
+}
+
+$abchWidth: 30px;
+$abchScale: 1;
+
+.btnAbDisplay,
+.btnChDisplay {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  background-size: $abchWidth/$abchScale;
+  width: $abchWidth/$abchScale;
+  height: $abchWidth/$abchScale;
+}
+
+.btnAbDisplay {
+  background-image: url(../images/buttons/abDisplay.png);
+}
+
+.btnChDisplay {
+  background-image: url(../images/buttons/chDisplay.png);
+}
+
+.s2pplPic {
+}
+$DialogWidth: 202px;
+$DialogHeight: 126px;
+$DialogScale: 1.8;
+.s2DialogPic {
+  width: $DialogWidth/$DialogScale;
+  position: relative;
+  bottom: 150px;
+}
+
+.s2DialogPicHide {
+  opacity: 0;
+  width: $DialogWidth/$DialogScale;
+  position: relative;
+}
+
+.s2BtnBox {
+  margin-top: 50px;
 }
