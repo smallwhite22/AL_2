@@ -18,9 +18,13 @@ let qType = 1;
 //不重覆亂數的容器
 let haveIt = [];
 
-let blobBox = [];
-let blobLength = AudioData.length;
-blobBox.length = blobLength;
+let myRecordNo = 0;
+let blobBox = [''];
+blobBox.length = AudioData.length;
+for (var i = 0, l = blobBox.length; i < l; i++) {
+  blobBox[i] = './sound/blank.mp3';
+}
+//錄影暫存路徑的容器
 
 let cQ = 1;
 
@@ -100,12 +104,6 @@ function countQn() {
 //隨機產生的題號
 let quNum = generateUniqueRandom(maxNr) - 1;
 
-function PlayRecordAll() {
-  audio.pause();
-  audio = new Audio(myRecord);
-  audio.play();
-}
-let myRecord = '';
 class RecorderD extends Component {
   constructor(props) {
     super(props);
@@ -132,7 +130,6 @@ class RecorderD extends Component {
     audio = new Audio(this.state.path);
     audio.play();
     console.log('path: ', this.state.path);
-    console.log(`myRecord: `, myRecord);
   };
 
   onData(recordedBlob) {
@@ -144,7 +141,9 @@ class RecorderD extends Component {
     this.setState({
       path: recordedBlob.blobURL,
     });
-    myRecord = recordedBlob.blobURL;
+    blobBox[this.props.value - 1] = recordedBlob.blobURL;
+    console.log(`value: `, this.props.value);
+    console.log(`blobBox: `, blobBox);
   };
 
   render() {
@@ -451,6 +450,7 @@ class Post extends Component {
       s1ch: false,
       s1ab: false,
       s2start: false,
+      s2RecordPlay: false,
       s2s: true,
       s2intro: false,
       s3intro: false,
@@ -1002,6 +1002,38 @@ class Post extends Component {
       s1ch: false,
     });
   };
+  PlayRecordFun() {
+    if (myRecordNo < blobBox.length) {
+      audio = new Audio(blobBox[myRecordNo]);
+      audio.play();
+      audio.onended = () => {
+        myRecordNo = myRecordNo + 1;
+        this.PlayRecordFun();
+        console.log(`blobBox: `, blobBox[myRecordNo]);
+      };
+    } else {
+      console.log('錄音播放完畢');
+      this.setState({
+        s2RecordPlay: false,
+      });
+    }
+  }
+  PlayRecordAll = () => {
+    audio.pause();
+    myRecordNo = 0;
+    this.PlayRecordFun();
+    this.setState({
+      s2RecordPlay: true,
+    });
+  };
+
+  StopRecordAll = () => {
+    audio.pause();
+    myRecordNo = 0;
+    this.setState({
+      s2RecordPlay: false,
+    });
+  };
 
   s2Audio1() {
     if (audioNo < AudioData.length && !this.state.s3start) {
@@ -1246,7 +1278,11 @@ class Post extends Component {
           <div className={'s2Box'}>
             <div className={'s4Title'}>
               請聽對話
-              <br /><br /><br /><br /><br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
             </div>
             <div className={'s2ppl'}>
               <div>
@@ -1346,7 +1382,7 @@ class Post extends Component {
           </div>
         )}
         {/* 第二階段：自己錄音自己聽*/}
-        {this.state.s3start && (
+        {!this.state.s3start && (
           <div className={'s3Box'}>
             <div className={'s3in2Title'}>
               <div>教學說明：</div>
@@ -1370,16 +1406,25 @@ class Post extends Component {
                       )}
                     </button>
                   </div>
-                  <RecorderD />
+                  <RecorderD value={s3in1.n} />
                 </li>
               ))}
             </ul>
             <div>
-              <button
-                onClick={() => PlayRecordAll()}
-                className={`${'btnNo3'} ${'btnSame'}`}>
-                全部播放
-              </button>
+              {!this.state.s2RecordPlay && (
+                <button
+                  onClick={this.PlayRecordAll}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  全部播放
+                </button>
+              )}
+              {this.state.s2RecordPlay && (
+                <button
+                  onClick={this.StopRecordAll}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  停止
+                </button>
+              )}
               <button
                 onClick={this.s3Tos4intro}
                 className={`${'btnNo3'} ${'btnSame'}`}>
@@ -1575,7 +1620,7 @@ class Post extends Component {
           </div>
         )}
         {/* 第四階段：打字練習*/}
-        {!this.state.s4start && (
+        {this.state.s4start && (
           <div className={'s4Box'}>
             <div className={'s4Title'}>第四階段</div>
 
@@ -1604,13 +1649,21 @@ class Post extends Component {
                 )}
                 {!this.state.s4an && (
                   <div>
-                    <button onClick={this.showAnswer} className={`${'btnNo4'} ${'btnSame'}`}>顯示範例答案</button>
+                    <button
+                      onClick={this.showAnswer}
+                      className={`${'btnNo4'} ${'btnSame'}`}>
+                      顯示範例答案
+                    </button>
                   </div>
                 )}
                 {this.state.s4an && !this.state.s4qn && (
                   <div>
                     <div>
-                      <button onClick={this.showQn} className={`${'btnNo4'} ${'btnSame'}`}>開始作答</button>
+                      <button
+                        onClick={this.showQn}
+                        className={`${'btnNo4'} ${'btnSame'}`}>
+                        開始作答
+                      </button>
                     </div>
                   </div>
                 )}
@@ -1681,7 +1734,9 @@ class Post extends Component {
                       )}
                       {this.state.s4correct && !this.state.s5finish && (
                         <div className={'s4NextQu'}>
-                          <button onClick={this.nextQuestion} className={`${'btnNo3'} ${'btnSame'}`}>
+                          <button
+                            onClick={this.nextQuestion}
+                            className={`${'btnNo3'} ${'btnSame'}`}>
                             {this.state.btnCon}
                           </button>
                         </div>
