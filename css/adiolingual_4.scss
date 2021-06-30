@@ -183,7 +183,6 @@ button {
   li:last-child {
     margin-bottom: 50px;
   }
-  
 }
 
 .s3qBox {
@@ -252,9 +251,9 @@ button {
 .recordBox {
   position: relative;
   bottom: 11px;
-   button {
-     margin-left: 30px;
-   }
+  button {
+    margin-left: 30px;
+  }
 }
 .audio-react-recorder {
   height: 80px;
@@ -279,21 +278,19 @@ button {
   div {
     display: inline;
   }
-  div:nth-child(2) {
-    color: red;
-  }
+  
 }
 .s4ex_an {
   margin-bottom: 30px;
 }
-.s4_answerAreaOutBox{
+.s4_answerAreaOutBox {
   position: relative;
   top: 15px;
 }
 .s4_answerArea {
   background-color: rgb(255, 240, 174);
   border-radius: 15px;
-  padding:15px;
+  padding: 15px;
 }
 .s4_qu {
   margin-bottom: 15px;
@@ -316,7 +313,6 @@ button {
       margin-top: 10px;
     }
   }
-  
 }
 
 .s4list :last-child {
@@ -445,6 +441,10 @@ button {
 
 .s2BlankSpace {
   width: 30px;
+}
+
+.colorBlack {
+  color: black !important;
 }
 
 /*buttons*/
@@ -605,9 +605,17 @@ $DialogScale: 1.8;
 }
 
 //select
+.selectArea{
+  display:flex;
+  justify-content:flex-end;
+  position: relative;
+  top: 20px;
+  right: 50px;
+}
 .AriaMenuButton {
   display: inline-block;
   position: relative;
+  
 }
 
 .AriaMenuButton-trigger {
@@ -617,16 +625,16 @@ $DialogScale: 1.8;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: #EEE;
-  background-image: linear-gradient(#FCFCFC, #EEE);
-  border: 1px solid #D5D5D5;
+  background-color: #eee;
+  background-image: linear-gradient(#fcfcfc, #eee);
+  border: 1px solid #d5d5d5;
   border-radius: 3px;
-  font-weight: bold;
   padding: 6px 10px;
+  font-size: 18px;
 }
 
 .AriaMenuButton-trigger::after {
-  content: "";
+  content: '';
   display: inline-block;
   margin-left: 3px;
   position: relative;
@@ -639,16 +647,16 @@ $DialogScale: 1.8;
 .AriaMenuButton-trigger:hover,
 .AriaMenuButton-trigger:focus,
 .AriaMenuButton-trigger.is-open {
-  background-color: #DDD;
-  background-image: linear-gradient(#EEE, #DDD);
-  border-color: #CCC;
+  background-color: #ddd;
+  background-image: linear-gradient(#eee, #ddd);
+  border-color: #ccc;
 }
 
 .AriaMenuButton-trigger:active,
 .AriaMenuButton-trigger.is-open {
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
   background-image: none;
-  border-color: #B5B5B5;
+  border-color: #b5b5b5;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
@@ -661,12 +669,10 @@ $DialogScale: 1.8;
   left: 0;
   width: 200px;
   z-index: 99;
-  
+font-size: 18px;
   border-radius: 3px;
   margin: 4px 0 0 0;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-
-  
 }
 
 .AriaMenuButton-menu--flushRight {
@@ -676,7 +682,7 @@ $DialogScale: 1.8;
 .AriaMenuButton-menuItem {
   cursor: pointer;
   padding: 8px;
-  border-bottom: 1px solid #EEE;
+  border-bottom: 1px solid #eee;
 }
 
 .AriaMenuButton-menuItemWrapper:first-of-type .AriaMenuButton-menuItem {
@@ -691,7 +697,7 @@ $DialogScale: 1.8;
 
 .AriaMenuButton-menuItem:hover,
 .AriaMenuButton-menuItem:focus {
-  background-color: #4183C4;
+  background-color: #4183c4;
   color: #fff;
 }
 
@@ -699,7 +705,6 @@ $DialogScale: 1.8;
   cursor: default;
   font-weight: bold;
 }
-
 
 /* FANCY */
 
@@ -725,11 +730,11 @@ $DialogScale: 1.8;
 
 .FancyMB-trigger:hover,
 .FancyMB-trigger:focus {
-  background: #C9F1FF;
+  background: #c9f1ff;
 }
 
 .FancyMB-trigger::after {
-  content: "";
+  content: '';
   display: inline-block;
   margin-left: 20px;
   position: relative;
@@ -755,11 +760,11 @@ $DialogScale: 1.8;
 
 .FancyMB-menu::before {
   border: inset 6px;
-  content: "";
+  content: '';
   display: block;
   height: 0;
   width: 0;
-  border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #FFF rgba(0, 0, 0, 0);
+  border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff rgba(0, 0, 0, 0);
   border-bottom-style: solid;
   position: absolute;
   top: -12px;
@@ -769,7 +774,7 @@ $DialogScale: 1.8;
 
 .FancyMB-menu::after {
   border: inset 7px;
-  content: "";
+  content: '';
   display: block;
   height: 0;
   width: 0;
@@ -789,7 +794,7 @@ $DialogScale: 1.8;
 
 .FancyMB-menuItem:hover,
 .FancyMB-menuItem:focus {
-  background: #EEE;
+  background: #eee;
 }
 
 .FancyMB-menuItem.is-selected {
@@ -858,6 +863,6 @@ $DialogScale: 1.8;
   transform-origin: 10px 0;
   -webkit-transform: scale(1);
   transform: scale(1);
-  -webkit-transition: -webkit-transform 0.2s cubic-bezier(.55,0,.1,1);
-  transition: transform 0.2s cubic-bezier(.55,0,.1,1);
+  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: transform 0.2s cubic-bezier(0.55, 0, 0.1, 1);
 }

@@ -15,7 +15,7 @@ const PostData = require('../JSON/1/b' + postPath + '.json');
 const AudioData = require('../JSON/1/audio_b' + postPath + '.json');
 const IntroData = require('../JSON/1/instructions_b' + postPath + '.json');
 //題型編號
-let qType = 1;
+let qType = 2;
 //不重覆亂數的容器
 let haveIt = [];
 
@@ -38,7 +38,7 @@ const menuItemWords = [
   '第四階段－練習題一',
   '第四階段－練習題二',
 ];
-//階段選擇
+//階段選擇清單
 
 let cQ = 1;
 
@@ -67,7 +67,7 @@ for (var i = 0, l = PostData.length; i < l; i++) {
 
 //題型總數
 let qAllType = Object.keys(qAllTypeDic).length;
-
+console.log(`qAllType: `, qAllType);
 //同題型內有幾題
 let maxNr = PostData.filter((PostData) => PostData.tn == qType).length;
 
@@ -110,8 +110,15 @@ function generateUniqueRandom(maxNr) {
 function countQn() {
   for (let i = 1; i <= qType - 1; i++) {
     directQ = directQ + qAllTypeDic[i];
+    console.log(
+      'i = ',
+      i,
+      'directQ = ',
+      directQ,
+      ',該題型範例前的題目數量 = ',
+      qAllTypeDic[i]
+    );
   }
-  console.log('i = ', directQ, ',該題型範例前的題目數量 = ', qAllTypeDic[i]);
 }
 
 //隨機產生的題號
@@ -456,27 +463,19 @@ class Post extends Component {
     // 這一行有點難解釋，想深入研究的麻煩自己查資料
     //
     this.state = {
-      sceneNo: 7,
-
+      sceneNo: 0,
       s1ch: false,
       s1ab: false,
-
       s2RecordPlay: false,
-
       s2intro: false,
-
       audioRole: 0,
-
       s3in2qStart: false,
-
       s3in2Complete: false,
-
       s4ex: false,
       s4an: false,
       s4qn: false,
       s4correct: false,
       s4showList: false,
-
       s5start: false,
       s5finish: false,
       audioGoing: true,
@@ -505,6 +504,7 @@ class Post extends Component {
         //   picPath:'',
         // },
       ],
+      todos2: [],
       s3in2List: [
         {
           n: '',
@@ -594,14 +594,16 @@ class Post extends Component {
         s1ch: false,
       });
     } else if (value == '第四階段－練習題一') {
+      directQ = 0;
+      qType = 1;
+      countQn();
       cQ = 1;
       wrongTime = 1;
       haveIt = [];
-      qType = 1;
-      countQn();
       QuestionNumber();
-      console.log('question: ', this.state.answer);
       quNum = directQ + generateUniqueRandom(maxNr) - 1;
+      console.log('question: ', this.state.answer);
+      console.log(haveIt);
       this.setState({
         sceneNo: 8,
         s4ex: false,
@@ -615,11 +617,70 @@ class Post extends Component {
         todos: [],
         btnCon: '下一題',
         value: '',
+        searchText: PostData[directQ].keyw,
+        textToHighlight: PostData[directQ].ab,
         question: PostData[quNum].keyw,
         questionAudio: PostData[quNum].keyPath,
         answer: PostData[quNum].ab,
       });
+    } else if (value == '第四階段－練習題二') {
+      directQ = 0;
+      qType = 2;
+      countQn();
+      cQ = 1;
+      wrongTime = 1;
+      haveIt = [];
+      QuestionNumber();
+      quNum = directQ + generateUniqueRandom(maxNr) - 1;
+      console.log(haveIt);
+      this.setState({
+        todos: [],
+        sceneNo: 9,
+        searchText: PostData[directQ].keyw,
+        textToHighlight: PostData[directQ].ab,
+        s4ex: false,
+        s4an: false,
+        s4qn: false,
+        s4correct: false,
+        s4showList: false,
+        s5start: false,
+        s5finish: false,
+        question: PostData[quNum].keyw,
+        questionAudio: PostData[quNum].keyPath,
+        answer: PostData[quNum].ab,
+        answerAudio: PostData[quNum].abPath,
+        btnCon: '下一題',
+      });
     }
+    console.log(`quNum: `, quNum);
+  };
+  s5tos5in2 = () => {
+    qType = 2;
+    countQn();
+    cQ = 1;
+    wrongTime = 1;
+    haveIt = [];
+    QuestionNumber();
+    quNum = directQ + generateUniqueRandom(maxNr) - 1;
+    this.setState({
+      todos: [],
+      sceneNo: 9,
+      searchText: PostData[directQ].keyw,
+      textToHighlight: PostData[directQ].ab,
+      s4ex: false,
+      s4an: false,
+      s4qn: false,
+      s4correct: false,
+      s4showList: false,
+      s5start: false,
+      s5finish: false,
+      question: PostData[quNum].keyw,
+      questionAudio: PostData[quNum].keyPath,
+      answer: PostData[quNum].ab,
+      answerAudio: PostData[quNum].abPath,
+      btnCon: '下一題',
+    });
+    console.log(`quNum: `, quNum);
   };
   s4IntroTos4() {
     audio.pause();
@@ -681,8 +742,8 @@ class Post extends Component {
     cQ = 1;
     wrongTime = 1;
     haveIt = [];
-    qType = 1;
     QuestionNumber();
+    quNum = directQ + generateUniqueRandom(maxNr) - 1;
     this.setState({
       s4ex: false,
       s4an: true,
@@ -695,7 +756,13 @@ class Post extends Component {
       todos: [],
       btnCon: '下一題',
       value: '',
+      searchText: PostData[quNum].keyw,
+      textToHighlight: PostData[quNum].ab,
+      question: PostData[quNum].keyw,
+      questionAudio: PostData[quNum].keyPath,
+      answer: PostData[quNum].ab,
     });
+    console.log(`quNum: `, quNum);
   };
 
   sendAnswer(idx, array) {
@@ -864,6 +931,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              skeyw:PostData[quNum].skeyw,
+              sab: PostData[quNum].sab,
               result: true,
               picPath: './images/pic-right.png',
             },
@@ -886,6 +955,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              skeyw:PostData[quNum].skeyw,
+              sab: PostData[quNum].sab,
               result: true,
               picPath: './images/pic-right.png',
             },
@@ -910,6 +981,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              skeyw:PostData[quNum].skeyw,
+              sab: PostData[quNum].sab,
               result: true,
               picPath: './images/pic-right.png',
             },
@@ -953,6 +1026,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              skeyw:PostData[quNum].skeyw,
+              sab: PostData[quNum].sab,
               result: true,
               picPath: './images/pic-wrong.png',
             },
@@ -977,6 +1052,8 @@ class Post extends Component {
               abPath: PostData[quNum].abPath,
               keyw: PostData[quNum].keyw,
               keyPath: PostData[quNum].keyPath,
+              skeyw:PostData[quNum].skeyw,
+              sab: PostData[quNum].sab,
               result: true,
               picPath: './images/pic-wrong.png',
             },
@@ -1030,6 +1107,7 @@ class Post extends Component {
 
   next2(idx) {
     console.log(this.state.questionAudio);
+    console.log(`quNum: `, quNum);
   }
 
   sendEnter = (event) => {
@@ -1259,7 +1337,7 @@ class Post extends Component {
   }
 
   handleCopy(e) {
-    e.preventDefault();
+    //e.preventDefault();
     //alert('不要複製貼上喔');
   }
 
@@ -1298,7 +1376,7 @@ class Post extends Component {
         )}
         {sceneNo != 0 && (
           <div className={'selectArea'}>
-            <div>
+            
               <Wrapper
                 className='AriaMenuButton'
                 onSelection={this.handleSelection}>
@@ -1307,7 +1385,7 @@ class Post extends Component {
                   <ul className='AriaMenuButton-menu'>{menuItems}</ul>
                 </Menu>
               </Wrapper>
-            </div>
+            
           </div>
         )}
 
@@ -1747,7 +1825,12 @@ class Post extends Component {
                     範例題目：
                     <S4Audio pathName={PostData[0].keyPath} />
                   </div>
-                  <div>{PostData[0].keyw}</div>
+                  <div><Highlighter
+                        highlightClassName='color-red'
+                        searchWords={[PostData[0].keyw]}
+                        autoEscape={true}
+                        textToHighlight={PostData[0].keyw}
+                      /></div>
                 </div>
                 {this.state.s4an && (
                   <div>
@@ -1797,7 +1880,7 @@ class Post extends Component {
                                       <div className={'s4AnNo'}>{todo.id}.</div>
                                       題目:&nbsp;
                                       <S4Audio pathName={todo.keyPath} />
-                                      <div className={'color-red'}>
+                                      <div>
                                         {todo.keyw}
                                       </div>
                                     </div>
@@ -1874,6 +1957,163 @@ class Post extends Component {
                   再練習一次
                 </button>
                 <button
+                  onClick={this.s5tos5in2}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  前往練習題二
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {/* 第五階段：練習題二*/}
+        {sceneNo == 9 && (
+          <div className={'s4Box'}>
+            <div className={'s4Title'}>第四階段-練習題二</div>
+
+            {!this.state.s4ex && (
+              <div>
+                <div className={'s4ex_text'}>
+                  <div>
+                    範例題目：
+                    <S4Audio pathName={PostData[directQ].keyPath} />
+                  </div>
+                  <div><Highlighter
+                        highlightClassName='color-red'
+                        searchWords={[PostData[directQ].skeyw]}
+                        autoEscape={true}
+                        textToHighlight={PostData[directQ].keyw}
+                      /></div>
+                </div>
+                {this.state.s4an && (
+                  <div>
+                    <div className={'s4ex_an'}>
+                      範例答案：
+                      <S4Audio pathName={PostData[directQ].abPath} />
+                      <Highlighter
+                        highlightClassName='color-red'
+                        searchWords={[PostData[directQ].sab]}
+                        autoEscape={true}
+                        textToHighlight={PostData[directQ].ab}
+                      />
+                    </div>
+                  </div>
+                )}
+                {!this.state.s4an && (
+                  <div>
+                    <button
+                      onClick={this.showAnswer}
+                      className={`${'btnNo4'} ${'btnSame'}`}>
+                      顯示範例答案
+                    </button>
+                  </div>
+                )}
+                {this.state.s4an && !this.state.s4qn && (
+                  <div>
+                    <div>
+                      <button
+                        onClick={this.showQn}
+                        className={`${'btnNo4'} ${'btnSame'}`}>
+                        開始作答
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {this.state.s4qn && (
+                  <div>
+                    {this.state.s5start && (
+                      <ul className='s4list'>
+                        {todos.map((todo) => {
+                          return (
+                            <li key={todo.id}>
+                              {this.state.s4showList && (
+                                <div className={'s4AnBox'}>
+                                  <div className={'s4AnBoxIn'}>
+                                    <div className={'s4An'}>
+                                      <div className={'s4AnNo'}>{todo.id}.</div>
+                                      題目:&nbsp;
+                                      <S4Audio pathName={todo.keyPath} />
+                                      <div>
+                                      <Highlighter
+                                        highlightClassName='color-red'
+                                        searchWords={[todo.skeyw]}
+                                        autoEscape={true}
+                                        textToHighlight={todo.keyw}
+                                      />
+                                      </div>
+                                    </div>
+                                    <div className={'s4AnText'}>
+                                      答案:&nbsp;
+                                      <S4Audio pathName={todo.abPath} />
+                                      <Highlighter
+                                        highlightClassName='color-red'
+                                        searchWords={[todo.sab]}
+                                        autoEscape={true}
+                                        textToHighlight={todo.ab}
+                                      />
+                                      <div className={'s4PicBox'}>
+                                        {todo.result && (
+                                          <img src={todo.picPath} />
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                    <div className={'s4_answerAreaOutBox'}>
+                      {!this.state.s4correct && (
+                        <div className={'s4_answerArea'}>
+                          <div className={'s4_qu'}>
+                            {cQ}.題目:
+                            <S4Audio pathName={this.state.questionAudio} />
+                            {this.state.question}
+                          </div>
+                          輸入答案：
+                          <input
+                            type='text'
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                            onPaste={this.handleCopy}
+                            onKeyPress={this.sendEnter}
+                            className={'input'}
+                          />
+                          <button
+                            onClick={this.sendAnswer}
+                            className={`${'btnNo5'} ${'btnSame'}`}>
+                            送出答案
+                          </button>
+                        </div>
+                      )}
+                      {this.state.s4correct && !this.state.s5finish && (
+                        <div className={'s4NextQu'}>
+                          <button
+                            onClick={this.nextQuestion}
+                            className={`${'btnNo3'} ${'btnSame'}`}>
+                            {this.state.btnCon}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* <div className={'s4pic'}>
+                      <img src={this.state.resultPicPath} />
+                    </div> */}
+                  </div>
+                )}
+              </div>
+            )}
+            {this.state.s5finish && (
+              <div className={'s3in2BtnBox'}>
+                <button
+                  onClick={this.s5re}
+                  className={`${'btnNo3'} ${'btnSame'}`}>
+                  再練習一次
+                </button>
+                <button
                   onClick={this.reAll}
                   className={`${'btnNo3'} ${'btnSame'}`}>
                   重新開始
@@ -1882,7 +2122,6 @@ class Post extends Component {
             )}
           </div>
         )}
-        {/* 第五階段：練習題二*/}
       </div>
     );
   }
