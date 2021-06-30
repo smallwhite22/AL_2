@@ -5,9 +5,10 @@ import Highlighter from 'react-highlight-words';
 import AudioReactRecorder, {RecordState} from 'audio-react-recorder'; //B
 import {ReactMic} from 'react-mic'; // C
 import ReactMicRecord from 'react-mic-record'; //D
+import {Button, Wrapper, Menu, MenuItem} from 'react-aria-menubutton';
 
 let context = new AudioContext();
-console.log(context);
+
 //JSON檔案路徑
 let postPath = 1;
 const PostData = require('../JSON/1/b' + postPath + '.json');
@@ -25,6 +26,19 @@ for (var i = 0, l = blobBox.length; i < l; i++) {
   blobBox[i] = './sound/blank.mp3';
 }
 //錄影暫存路徑的容器
+
+const menuItemWords = [
+  '第一階段說明',
+  '第一階段',
+  '第二階段說明',
+  '第二階段',
+  '第三階段說明',
+  '第三階段',
+  '第四階段說明',
+  '第四階段－練習題一',
+  '第四階段－練習題二',
+];
+//階段選擇
 
 let cQ = 1;
 
@@ -48,12 +62,11 @@ let qAllTypeDic = {},
   e;
 for (var i = 0, l = PostData.length; i < l; i++) {
   e = PostData[i];
-  qAllTypeDic[e.qc] = (qAllTypeDic[e.qc] || 0) + 1;
+  qAllTypeDic[e.tn] = (qAllTypeDic[e.tn] || 0) + 1;
 }
 
 //題型總數
 let qAllType = Object.keys(qAllTypeDic).length;
-console.log('題型類型總共有:' + qAllType);
 
 //同題型內有幾題
 let maxNr = PostData.filter((PostData) => PostData.tn == qType).length;
@@ -68,7 +81,7 @@ let newEx = qAllTypeDic[qType];
 // };
 
 function QuestionNumber() {
-  maxNr = PostData.filter((PostData) => PostData.qc == qType).length;
+  maxNr = PostData.filter((PostData) => PostData.tn == qType).length;
 }
 
 //產生不重複的隨機數字
@@ -102,8 +115,8 @@ function countQn() {
 }
 
 //隨機產生的題號
-let quNum = generateUniqueRandom(maxNr) - 1;
-
+let quNum = directQ + generateUniqueRandom(maxNr) - 1;
+console.log(`directQ:`, directQ, `quNum: `, quNum);
 class RecorderD extends Component {
   constructor(props) {
     super(props);
@@ -142,8 +155,6 @@ class RecorderD extends Component {
       path: recordedBlob.blobURL,
     });
     blobBox[this.props.value - 1] = recordedBlob.blobURL;
-    console.log(`value: `, this.props.value);
-    console.log(`blobBox: `, blobBox);
   };
 
   render() {
@@ -445,28 +456,27 @@ class Post extends Component {
     // 這一行有點難解釋，想深入研究的麻煩自己查資料
     //
     this.state = {
-      s0start: true,
-      s1start: false,
+      sceneNo: 7,
+
       s1ch: false,
       s1ab: false,
-      s2start: false,
+
       s2RecordPlay: false,
-      s2s: true,
+
       s2intro: false,
-      s3intro: false,
+
       audioRole: 0,
-      s3start: false,
+
       s3in2qStart: false,
-      s3in2start: false,
+
       s3in2Complete: false,
-      s4intro: false,
-      s4start: false,
+
       s4ex: false,
       s4an: false,
       s4qn: false,
       s4correct: false,
       s4showList: false,
-      s5intro: false,
+
       s5start: false,
       s5finish: false,
       audioGoing: true,
@@ -518,18 +528,103 @@ class Post extends Component {
   s3IntroTos3() {
     audio.pause();
     this.setState({
-      s3intro: false,
-      s3start: true,
+      sceneNo: 4,
       s1ab: false,
       s1ch: false,
     });
   }
-
+  handleSelection = (value, event) => {
+    audio.pause();
+    if (value == '第一階段說明') {
+      audio = new Audio(IntroData[0].path);
+      audio.play();
+      this.setState({
+        sceneNo: 1,
+        s1ab: false,
+        s1ch: false,
+      });
+    } else if (value == '第一階段') {
+      audioNo = 0;
+      this.setState({
+        s2intro: false,
+        sceneNo: 2,
+      });
+      this.s2Audio1();
+    } else if (value == '第二階段說明') {
+      audio = new Audio(IntroData[2].path);
+      audio.play();
+      this.setState({
+        sceneNo: 3,
+        s1ab: false,
+        s1ch: false,
+      });
+    } else if (value == '第二階段') {
+      this.setState({
+        sceneNo: 4,
+      });
+    } else if (value == '第三階段說明') {
+      audio = new Audio(IntroData[3].path);
+      audio.play();
+      this.setState({
+        sceneNo: 5,
+        s1ab: false,
+        s1ch: false,
+      });
+    } else if (value == '第三階段') {
+      audioQ = 0;
+      wrongTime = 1;
+      this.setState({
+        sceneNo: 6,
+        s3in2List: [
+          {n: '', path: '', role: '', correct: null, picPath: '', ab: ''},
+        ],
+        s4correct: false,
+        s3in2Complete: false,
+        s3in2qStart: false,
+        audioQuestion: AudioData[audioQ].path,
+        audioQrole: AudioData[audioQ].role,
+        audioAnswer: AudioData[audioQ].ab,
+      });
+    } else if (value == '第四階段說明') {
+      audio = new Audio(IntroData[4].path);
+      audio.play();
+      this.setState({
+        sceneNo: 7,
+        s1ab: false,
+        s1ch: false,
+      });
+    } else if (value == '第四階段－練習題一') {
+      cQ = 1;
+      wrongTime = 1;
+      haveIt = [];
+      qType = 1;
+      countQn();
+      QuestionNumber();
+      console.log('question: ', this.state.answer);
+      quNum = directQ + generateUniqueRandom(maxNr) - 1;
+      this.setState({
+        sceneNo: 8,
+        s4ex: false,
+        s4an: false,
+        s4qn: false,
+        s4correct: false,
+        s4showList: false,
+        s5intro: false,
+        s5start: false,
+        s5finish: false,
+        todos: [],
+        btnCon: '下一題',
+        value: '',
+        question: PostData[quNum].keyw,
+        questionAudio: PostData[quNum].keyPath,
+        answer: PostData[quNum].ab,
+      });
+    }
+  };
   s4IntroTos4() {
     audio.pause();
     this.setState({
-      s4intro: false,
-      s3in2start: true,
+      sceneNo: 6,
       s1ab: false,
       s1ch: false,
     });
@@ -538,8 +633,7 @@ class Post extends Component {
   s5IntroTos4() {
     audio.pause();
     this.setState({
-      s5intro: false,
-      s4start: true,
+      sceneNo: 8,
       s1ab: false,
       s1ch: false,
       s4correct: false,
@@ -587,9 +681,9 @@ class Post extends Component {
     cQ = 1;
     wrongTime = 1;
     haveIt = [];
+    qType = 1;
+    QuestionNumber();
     this.setState({
-      s4intro: false,
-      s4start: true,
       s4ex: false,
       s4an: true,
       s4qn: true,
@@ -970,8 +1064,7 @@ class Post extends Component {
     audio = new Audio(audioPath);
     audio.play();
     this.setState({
-      s0start: false,
-      s1start: true,
+      sceneNo: 1,
     });
 
     //this.s2Audio1(array, () => this.s2Audio2(idx));
@@ -980,8 +1073,7 @@ class Post extends Component {
   s1Tos2() {
     audio.pause();
     this.setState({
-      s1start: false,
-      s2start: true,
+      sceneNo: 2,
       s1ab: false,
       s1ch: false,
     });
@@ -1036,11 +1128,10 @@ class Post extends Component {
   };
 
   s2Audio1() {
-    if (audioNo < AudioData.length && !this.state.s3start) {
+    if (audioNo < AudioData.length) {
       audioPath = AudioData[audioNo].path;
       audio = new Audio(audioPath);
       this.setState({
-        s2s: false,
         audioRole: AudioData[audioNo].role,
       });
       audio.play();
@@ -1107,8 +1198,7 @@ class Post extends Component {
 
   s2Tos3Intro() {
     this.setState({
-      s2start: false,
-      s3intro: true,
+      sceneNo: 3,
     });
     audio.pause();
     audioPath = IntroData[2].path;
@@ -1117,8 +1207,7 @@ class Post extends Component {
   }
   s3Tos4intro() {
     this.setState({
-      s3start: false,
-      s4intro: true,
+      sceneNo: 5,
     });
     audio.pause();
     audioPath = IntroData[3].path;
@@ -1143,8 +1232,7 @@ class Post extends Component {
     wrongTime = 1;
     audio.pause();
     this.setState({
-      s5intro: true,
-      s3in2start: false,
+      sceneNo: 7,
       audioGoing: false,
     });
     audioPath = IntroData[4].path;
@@ -1183,14 +1271,21 @@ class Post extends Component {
 
   render() {
     let todos = this.state.todos;
+    let sceneNo = this.state.sceneNo;
 
-    const test = <button value={''}>7777</button>;
+    const menuItems = menuItemWords.map((word, i) => {
+      return (
+        <li key={i}>
+          <MenuItem className='AriaMenuButton-menuItem'>{word}</MenuItem>
+        </li>
+      );
+    });
 
     return (
       <div>
         <div className={'title'}>中高級教學模組</div>
         {/* 第0階段：開始前 */}
-        {this.state.s0start && (
+        {sceneNo == 0 && (
           <div className={'s0Box'}>
             <div>
               <button
@@ -1201,9 +1296,25 @@ class Post extends Component {
             </div>
           </div>
         )}
+        {sceneNo != 0 && (
+          <div className={'selectArea'}>
+            <div>
+              <Wrapper
+                className='AriaMenuButton'
+                onSelection={this.handleSelection}>
+                <Button className='AriaMenuButton-trigger'>選擇階段</Button>
+                <Menu>
+                  <ul className='AriaMenuButton-menu'>{menuItems}</ul>
+                </Menu>
+              </Wrapper>
+            </div>
+          </div>
+        )}
+
         {/* 第一階段：說明 */}
-        {this.state.s1start && (
+        {sceneNo == 1 && (
           <div className={'s1Box'}>
+            <div className={'s4Title'}>第一階段說明</div>
             <div className={'alignCenter'}>
               <div>
                 <img src={'./images/teacher0.png'} className={'h400'} />
@@ -1274,9 +1385,12 @@ class Post extends Component {
           </div>
         )}
         {/* 第一階段：對話沒有文字 */}
-        {this.state.s2start && (
+        {sceneNo == 2 && (
           <div className={'s2Box'}>
             <div className={'s4Title'}>
+              第一階段
+              <br />
+              <br />
               請聽對話
               <br />
               <br />
@@ -1341,7 +1455,7 @@ class Post extends Component {
           </div>
         )}
         {/* 第二階段說明*/}
-        {this.state.s3intro && (
+        {sceneNo == 3 && (
           <div className={'s1Box'}>
             <div className={'alignCenter'}>
               <div className={'s4Title'}>第二階段說明</div>
@@ -1382,8 +1496,9 @@ class Post extends Component {
           </div>
         )}
         {/* 第二階段：自己錄音自己聽*/}
-        {!this.state.s3start && (
+        {sceneNo == 4 && (
           <div className={'s3Box'}>
+            <div className={'s4Title'}>第二階段</div>
             <div className={'s3in2Title'}>
               <div>教學說明：</div>
               <div>
@@ -1428,13 +1543,13 @@ class Post extends Component {
               <button
                 onClick={this.s3Tos4intro}
                 className={`${'btnNo3'} ${'btnSame'}`}>
-                繼續
+                下一階段
               </button>
             </div>
           </div>
         )}
         {/* 第三階段：說明*/}
-        {this.state.s4intro && (
+        {sceneNo == 5 && (
           <div className={'s1Box'}>
             <div className={'alignCenter'}>
               <div className={'s4Title'}>第三階段說明</div>
@@ -1475,8 +1590,9 @@ class Post extends Component {
           </div>
         )}
         {/* 第三階段：聽打練習*/}
-        {this.state.s3in2start && (
+        {sceneNo == 6 && (
           <div className={'s3in2Box'}>
+            <div className={'s4Title'}>第三階段</div>
             <div className={'s3in2Title'}>
               <div>教學說明：</div>
               <div>點擊頭像聽老師談話的內容並寫出完整句子</div>
@@ -1579,7 +1695,7 @@ class Post extends Component {
           </div>
         )}
         {/* 第四階段：說明*/}
-        {this.state.s5intro && (
+        {sceneNo == 7 && (
           <div className={'s1Box'}>
             <div className={'alignCenter'}>
               <div className={'s4Title'}>第四階段說明</div>
@@ -1620,9 +1736,9 @@ class Post extends Component {
           </div>
         )}
         {/* 第四階段：打字練習*/}
-        {this.state.s4start && (
+        {sceneNo == 8 && (
           <div className={'s4Box'}>
-            <div className={'s4Title'}>第四階段</div>
+            <div className={'s4Title'}>第四階段-練習題一</div>
 
             {!this.state.s4ex && (
               <div>
@@ -1766,6 +1882,7 @@ class Post extends Component {
             )}
           </div>
         )}
+        {/* 第五階段：練習題二*/}
       </div>
     );
   }
